@@ -1,4 +1,7 @@
 package org.techstartingpoint.javagraphlib.components.core;
+
+import org.techstartingpoint.javagraphlib.model.json.NodeConfiguration;
+
 /**
  * 
  * Main classes from which tools should extend
@@ -62,15 +65,11 @@ public abstract class AbstractMainBaseComponent {
 	private String name;
 	
 
-	/**
-	 * Formal description of execution unit
-	 * It refers to class implementation and not subflow implementation
-	 * 
-	 * 
-	 * @author Jose Alberto Guastavino
-	 *
-	 */
-	private ComponentImplementation componentImplementation;
+
+
+    String environmentKey;
+    NodeConfiguration nodeConfiguration;
+
 	
 	public int getInputPorts() {
 		return inputPorts;
@@ -107,12 +106,19 @@ public abstract class AbstractMainBaseComponent {
 	}
 
 
-	public ComponentImplementation getComponentImplementation() {
-		return componentImplementation;
-	}
+    public String getEnvironmentKey() {
+        return environmentKey;
+    }
 
-	public void setComponentImplementation(ComponentImplementation componentImplementation) {
-		this.componentImplementation = componentImplementation;
-	}
+    public void setEnvironmentKey(String environmentKey) {
+        this.environmentKey = environmentKey;
+    }
 
+    public NodeConfiguration getNodeConfiguration() {
+        return nodeConfiguration;
+    }
+
+    public void setNodeConfiguration(NodeConfiguration nodeConfiguration) {
+        this.nodeConfiguration = nodeConfiguration;
+    }
 }

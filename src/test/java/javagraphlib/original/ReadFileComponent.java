@@ -1,5 +1,7 @@
 package javagraphlib.original;
 
+import javagraphlib.original.notgiven.DataPacket;
+
 public class ReadFileComponent implements Component {
 
     private String conf = null;

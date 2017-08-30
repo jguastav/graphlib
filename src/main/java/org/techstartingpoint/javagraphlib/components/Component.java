@@ -1,6 +1,6 @@
 package org.techstartingpoint.javagraphlib.components;
 
-import org.techstartingpoint.javagraphlib.core.InputPort;
+import org.techstartingpoint.javagraphlib.oldcore.InputPort;
 import org.techstartingpoint.javagraphlib.model.OutputPort;
 
 public interface Component {

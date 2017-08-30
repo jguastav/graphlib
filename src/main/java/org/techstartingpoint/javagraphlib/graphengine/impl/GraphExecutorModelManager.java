@@ -45,7 +45,7 @@ public class GraphExecutorModelManager {
 			GraphExecutionModel executionModel,
 			String prefix,
 			List<GraphNode> graphVertices,
-			List<GraphConnector> graphConnectors,
+			List<GraphConnection> graphConnections,
 			GraphCompleteEnvironment environment)
 					throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, NoSuchMethodException, InvocationTargetException, URISyntaxException {
 		GraphExecutionModel result=executionModel;
@@ -77,7 +77,7 @@ public class GraphExecutorModelManager {
 				throw e;
 			}
 		}
-		result.getConnectors().addAll(generateExecutionConnectors(graphConnectors,prefix));
+		result.getConnectors().addAll(generateExecutionConnectors(graphConnections,prefix));
 		result=rebuildConnectors(result);
 		return result;
 	}
@@ -105,10 +105,10 @@ public class GraphExecutorModelManager {
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	private static List<GraphExecutionConnector> generateExecutionConnectors(List<GraphConnector> connectors, String prefix) {
-		List<GraphExecutionConnector> result =new ArrayList<GraphExecutionConnector>();
-		for (GraphConnector connector:connectors) {
-			result.add(new GraphExecutionConnector(connector,prefix));
+	private static List<GraphExecutionConnection> generateExecutionConnectors(List<GraphConnection> connectors, String prefix) {
+		List<GraphExecutionConnection> result =new ArrayList<GraphExecutionConnection>();
+		for (GraphConnection connector:connectors) {
+			result.add(new GraphExecutionConnection(connector,prefix));
 		}
 		return result;
 	}
@@ -128,7 +128,7 @@ public class GraphExecutorModelManager {
 		Map<String,String> initialNodesMap=result.getInitialNodes();
 		Map<String,String> finalNodesMap=result.getFinalNodes();
 		// replace connectors for deepest nodes
-		for (GraphExecutionConnector connector:result.getConnectors()) {
+		for (GraphExecutionConnection connector:result.getConnectors()) {
 			if (connector.getSourceIndex()>=0) {
 				if (finalNodesMap.containsKey(connector.getSourceExecutionId())) {
 					connector.setSourceExecutionId(finalNodesMap.get(connector.getSourceExecutionId()));
@@ -185,7 +185,7 @@ public class GraphExecutorModelManager {
 		for (GraphNode element:activity.getNodeList()) {
 			noPredecessors.put(element.getId(),element);
 		}
-		for (GraphConnector connector:activity.getConnectorList())  {
+		for (GraphConnection connector:activity.getConnectorList())  {
 			if (noPredecessors.containsKey(connector.getTargetId())) {
 				noPredecessors.remove(connector.getTargetId());
 			}
@@ -264,7 +264,7 @@ public class GraphExecutorModelManager {
 				freeOutputConnections.put(new SimpleEntry<String, Integer>(element.getId(), new Integer(i)),element);
 			}
 		}
-		for (GraphConnector connector:activity.getConnectorList()) {
+		for (GraphConnection connector:activity.getConnectorList()) {
 			SimpleEntry<String, Integer> newKey=new SimpleEntry<String,Integer>(connector.getSourceElement().getId(),new Integer(connector.getSourceIndex()));
 			if (freeOutputConnections.containsKey(newKey)) {
 				freeOutputConnections.remove(newKey);
@@ -299,7 +299,7 @@ public class GraphExecutorModelManager {
 		GraphProcess activityWithNewConnectors=activity;
 		for (Map.Entry<Long, GraphNode> elementEntry:noPredecessorNodes.entrySet()) {
 			activityWithNewConnectors.getConnectorList().add(
-					new GraphConnector(
+					new GraphConnection(
 							new Long(activity.getConnectorList().size()+1),
 							initialGraphNode,1,
 							elementEntry.getValue(),1));
@@ -324,7 +324,7 @@ public class GraphExecutorModelManager {
 														  Map<SimpleEntry<Long, Integer>, GraphNode> noDirectionNodes) {
 		GraphProcess changedActivity=activity;
 		for (Map.Entry<SimpleEntry<Long, Integer>, GraphNode> source:noDirectionNodes.entrySet()) {
-			changedActivity.getConnectorList().add(new GraphConnector(
+			changedActivity.getConnectorList().add(new GraphConnection(
 						new Long(activity.getConnectorList().size()+1),
 						source.getValue(),source.getKey().getValue(),
 					finalGraphNode,1

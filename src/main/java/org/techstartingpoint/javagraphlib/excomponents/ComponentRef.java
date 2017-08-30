@@ -9,4 +9,9 @@ public class ComponentRef {
     public void tell(Object messageToSend, Object o) {
         // TODO:Implement
     }
+
+
+    public ComponentRef(Props props) {
+
+    }
 }

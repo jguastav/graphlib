@@ -3,6 +3,7 @@ package org.techstartingpoint.javagraphlib.model;
 
 import org.techstartingpoint.javagraphlib.components.core.AbstractMainBaseComponent;
 import org.techstartingpoint.javagraphlib.components.util.PluginLoader;
+import org.techstartingpoint.javagraphlib.model.json.NodeConfiguration;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -48,19 +49,16 @@ public class GraphNodeType {
 	private Integer outputPorts;
 
 
-	public GraphNodeType() {}
-	
-	
-	public GraphNodeType( String className)
+
+
+	public GraphNodeType( String className, String environmentKey, NodeConfiguration conf)
 			throws MalformedURLException, 
 				ClassNotFoundException, 
 				InstantiationException, 
 				IllegalAccessException, 
 				URISyntaxException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
-		this((AbstractMainBaseComponent) PluginLoader.getInstance(className));
-
-			this.setClassName(className);
-			
+		this((AbstractMainBaseComponent) PluginLoader.getInstance(className,environmentKey,conf));
+		this.setClassName(className);
 	}
 
 
@@ -68,39 +66,8 @@ public class GraphNodeType {
 		this.name=tool.getName();
 		this.inputPorts=tool.getInputPorts();
 		this.outputPorts=tool.getOutputPorts();
-		this.className=tool.getComponentImplementation().getClassName();
+		this.className=tool.getClass().getName();
 	}
-
-	
-	/**
-	 * update tool information
-	 * @throws MalformedURLException
-	 * @throws ClassNotFoundException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
-	 * @throws URISyntaxException
-	 */
-	public void update() throws 
-			MalformedURLException, 
-			ClassNotFoundException, 
-			InstantiationException, 
-			IllegalAccessException, 
-			NoSuchMethodException, 
-			SecurityException, 
-			IllegalArgumentException, 
-			InvocationTargetException, 
-			URISyntaxException {
-		GraphNodeType newInstance=new GraphNodeType(this.className);
-		this.name=newInstance.getName();
-		this.inputPorts=newInstance.getInputPorts();
-		this.outputPorts=newInstance.getOutputPorts();
-	}
-	
-	
 
 	
 	public String getId() {

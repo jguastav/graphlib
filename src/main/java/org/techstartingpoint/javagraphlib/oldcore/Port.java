@@ -1,4 +1,4 @@
-package org.techstartingpoint.javagraphlib.core;
+package org.techstartingpoint.javagraphlib.oldcore;
 
 import org.techstartingpoint.javagraphlib.components.Component;
 

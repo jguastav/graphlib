@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class GraphExecutionModel {
 	Map<String,AbstractMainExecutor> executors=new HashMap<String,AbstractMainExecutor>();
-	List<GraphExecutionConnector> connectors= new ArrayList<GraphExecutionConnector>();
+	List<GraphExecutionConnection> connectors= new ArrayList<GraphExecutionConnection>();
 	/**
 	 * ids containing entry nodes for subfluxes
 	 */
@@ -42,10 +42,10 @@ public class GraphExecutionModel {
 	public void setExecutors(Map<String, AbstractMainExecutor> executors) {
 		this.executors = executors;
 	}
-	public List<GraphExecutionConnector> getConnectors() {
+	public List<GraphExecutionConnection> getConnectors() {
 		return connectors;
 	}
-	public void setConnectors(List<GraphExecutionConnector> connectors) {
+	public void setConnectors(List<GraphExecutionConnection> connectors) {
 		this.connectors = connectors;
 	}
 	@Override

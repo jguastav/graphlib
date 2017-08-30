@@ -2,12 +2,12 @@ package javagraphlib.original;
 
 
 
+import javagraphlib.com.onelake.api.error.OnelakeException;
+import javagraphlib.com.onelake.api.error.WorkflowErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class DirectedGraph<T> implements Graph<T> {
 
@@ -28,7 +28,7 @@ public class DirectedGraph<T> implements Graph<T> {
         Vertex<T> destVertex = graph.get(dest);
 
         if (srcVertex == null || destVertex == null) {
-            throw OnelakeException.build(WorkflowErrorCode.NoSuchVertex);
+            throw OnelakeException.build(javagraphlib.com.onelake.api.error.WorkflowErrorCode.NoSuchVertex);
         }
 
         return srcVertex.hasNeighbor(destVertex);
@@ -43,7 +43,7 @@ public class DirectedGraph<T> implements Graph<T> {
         Vertex<T> vertexNode = graph.get(vertex);
 
         if (vertexNode == null)
-            throw OnelakeException.build(WorkflowErrorCode.NoSuchVertex);
+            throw OnelakeException.build(javagraphlib.com.onelake.api.error.WorkflowErrorCode.NoSuchVertex);
 
         Iterator<Vertex<T>> iterator = graph.values().iterator();
         while (iterator.hasNext()) {
@@ -59,7 +59,7 @@ public class DirectedGraph<T> implements Graph<T> {
         Vertex<T> toVertex = graph.get(to);
 
         if (fromVertex == null || toVertex == null)
-            throw OnelakeException.build(WorkflowErrorCode.NoSuchVertex);
+            throw OnelakeException.build(javagraphlib.com.onelake.api.error.WorkflowErrorCode.NoSuchVertex);
 
 
         Edge<T> edge = new Edge<>(fromVertex, fromPortIndex, toVertex, toPortIndex);
@@ -71,7 +71,7 @@ public class DirectedGraph<T> implements Graph<T> {
         Vertex<T> toVertex = graph.get(to);
 
         if (fromVertex == null || toVertex == null)
-            throw OnelakeException.build(WorkflowErrorCode.NoSuchVertex);
+            throw OnelakeException.build(javagraphlib.com.onelake.api.error.WorkflowErrorCode.NoSuchVertex);
 
         if (fromVertex.hasNeighbor(toVertex)) {
             fromVertex.removeEdgeTo(toVertex);
@@ -80,14 +80,14 @@ public class DirectedGraph<T> implements Graph<T> {
 
     public List<T> getNeighborsFor(T vertex) throws OnelakeException {
         if (graph.get(vertex) == null)
-            throw OnelakeException.build(WorkflowErrorCode.NoSuchVertex);
+            throw OnelakeException.build(javagraphlib.com.onelake.api.error.WorkflowErrorCode.NoSuchVertex);
 
         return graph.get(vertex).getNeighbors();
     }
 
     public void depthSearch(T start) throws OnelakeException {
         if (graph.get(start) == null)
-            throw OnelakeException.build(WorkflowErrorCode.NoSuchVertex);
+            throw OnelakeException.build(javagraphlib.com.onelake.api.error.WorkflowErrorCode.NoSuchVertex);
 
         Collection<T> visited = new HashSet<>();
         visited.add(start);

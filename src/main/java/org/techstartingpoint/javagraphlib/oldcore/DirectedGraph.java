@@ -1,8 +1,10 @@
-package org.techstartingpoint.javagraphlib.core;
+package org.techstartingpoint.javagraphlib.oldcore;
+
+import org.techstartingpoint.javagraphlib.oldcore.GraphObj;
 
 import java.util.ArrayList;
 
-public class DirectedGraph extends org.techstartingpoint.javagraphlib.core.GraphObj {
+public class DirectedGraph extends GraphObj {
 
     @Override
     public boolean isDirected() {
@@ -12,32 +14,55 @@ public class DirectedGraph extends org.techstartingpoint.javagraphlib.core.Graph
     @Override
     public int inDegree(int v) {
         int count = 0;
+        /*
         for (int key : getSuccessorData().keySet()) {
             if (getSuccessorData().get(key).contains(v)) {
                 count++;
             }
         }
+        */
         return count;
     }
+
 
     @Override
     public int predecessor(int v, int k) {
         if (!contains(v)) {
             return 0;
         }
+        /*
         if (k >= getPredecessorData().get(v).size() || k < 0) {
             return 0;
         }
         return getPredecessorData().get(v).get(k);
+        */
+        return 0;
+    }
+
+
+    @Override
+    public org.techstartingpoint.javagraphlib.oldcore.deps.Iteration<Integer> predecessors(int v) {
+        if (!contains(v)) {
+            return org.techstartingpoint.javagraphlib.oldcore.deps.Iteration.iteration(new ArrayList<Integer>());
+        } else {
+            return null;
+            /*
+            return org.techstartingpoint.javagraphlib.oldcore.deps.Iteration.iteration(getPredecessorData().get(v));
+            */
+        }
     }
 
     @Override
-    public org.techstartingpoint.javagraphlib.core.Iteration<Integer> predecessors(int v) {
-        if (!contains(v)) {
-            return org.techstartingpoint.javagraphlib.core.Iteration.iteration(new ArrayList<Integer>());
-        } else {
-            return org.techstartingpoint.javagraphlib.core.Iteration.iteration(getPredecessorData().get(v));
-        }
+    public int maxVertex() {
+        return 0;
+    }
+
+    public int vertexSize() {
+        return 0;
+    }
+
+    public int edgeSize() {
+        return 0;
     }
 }
 

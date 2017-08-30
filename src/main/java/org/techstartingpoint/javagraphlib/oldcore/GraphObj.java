@@ -1,4 +1,6 @@
-package org.techstartingpoint.javagraphlib.core;
+package org.techstartingpoint.javagraphlib.oldcore;
+
+import org.techstartingpoint.javagraphlib.oldcore.deps.Iteration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,9 +37,11 @@ abstract class GraphObj extends AbstractGraph {
     @Override
     public int connectorSize() {
         int similar = 0;
+        /*
         for (int[] tuple : connectors()) {
             similar++;
         }
+        */
         return similar;
     }
 
@@ -251,7 +255,10 @@ abstract class GraphObj extends AbstractGraph {
                 }
             }
         }
+        /*
         return Iteration.iteration(connectorData);
+        */
+        return null;
     }
 
     @Override
@@ -277,17 +284,17 @@ abstract class GraphObj extends AbstractGraph {
     }
 
     /** RETURNS my successor data.. */
-    HashMap<Integer, ArrayList<Integer>> getSuccessorData() {
+    public HashMap<Integer, ArrayList<Integer>> getSuccessorData() {
         return successorData;
     }
 
     /** RETURNS my predecessor data.. */
-    HashMap<Integer, ArrayList<Integer>> getPredecessorData() {
+    public HashMap<Integer, ArrayList<Integer>> getPredecessorData() {
         return predecessorData;
     }
 
     /** RETURNS all vertices of the graph. */
-    ArrayList<Integer> getNodes() {
+    public ArrayList<Integer> getNodes() {
         return nodes;
     }
 
@@ -304,4 +311,6 @@ abstract class GraphObj extends AbstractGraph {
     /** Number of connectors in the graph. Initially 0 when graph is
      * empty. */
     private int numConnectors = 0;
+
+    public abstract int maxVertex();
 }

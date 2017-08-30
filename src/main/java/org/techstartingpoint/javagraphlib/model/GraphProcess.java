@@ -18,46 +18,35 @@ public class GraphProcess {
 	
 	public static String NAME_PROPERTY="name";
 
-	
-	
-	private Long id;
+	private String id;
 	private String name;
 	
-	/**
-	 * This index can be changed. Name inside a job should be unique
-	 */
-	private Integer index;
-	
-
 	private List<GraphNode> nodeList;
 
 	
-	private List<GraphConnector> connectorList;
+	private List<GraphConnection> connectorList;
 
 
 	private GraphProcess() {}
 	
-	public GraphProcess(Long id, Integer index, String name, List<GraphNode> nodeList, List<GraphConnector> connectorList) {
+	public GraphProcess(String id,  String name, List<GraphNode> nodeList, List<GraphConnection> connectorList) {
 		this.id=id;
-		this.index=index;
 		this.name=name;
 		this.nodeList = nodeList;
-
 		this.connectorList = connectorList;
-
 	}
 
 	
-	public GraphProcess(Long id, Integer index, String name) {
-		this(id,index,name,new ArrayList<GraphNode>(),new ArrayList<GraphConnector>());
+	public GraphProcess(String id, String name) {
+		this(id,name,new ArrayList<GraphNode>(),new ArrayList<GraphConnection>());
 	}
 
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -76,25 +65,17 @@ public class GraphProcess {
 	public void setNodeList(List<GraphNode> nodeList) {
 		this.nodeList = nodeList;
 	}
-	public List<GraphConnector> getConnectorList() {
+	public List<GraphConnection> getConnectorList() {
 		return connectorList;
 	}
 
-	public void setConnectorList(List<GraphConnector> connectorList) {
+	public void setConnectorList(List<GraphConnection> connectorList) {
 		this.connectorList = connectorList;
-	}
-
-	public Integer getIndex() {
-		return index;
-	}
-
-	public void setIndex(Integer index) {
-		this.index = index;
 	}
 
 	@Override
 	public String toString() {
-		return "\n\nGraphProcess [id=" + id + ", name=" + name + ", index=" + index
+		return "\n\nGraphProcess [id=" + id + ", name=" + name
 				+ ", \n nodeList=" + nodeList + ", \n connectorList=" + connectorList + "]";
 	}
 	

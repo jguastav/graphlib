@@ -1,6 +1,7 @@
-package org.techstartingpoint.javagraphlib.core;
+package org.techstartingpoint.javagraphlib.oldcore;
 
 
+import org.techstartingpoint.javagraphlib.oldcore.deps.Iteration;
 
 // TODO: Refcomponent
 public abstract class AbstractGraph {
@@ -55,7 +56,7 @@ public abstract class AbstractGraph {
     public abstract void remove(int u, int v);
 
     /** Returns an Iteration over all vertices in numerical order. */
-    public abstract org.techstartingpoint.javagraphlib.core.Iteration<Integer> vertices();
+    public abstract Iteration<Integer> vertices();
 
     /** Return successor K of V, numbering from 0, or 0 if there
      *  is no such successor (or V is not a node). */
@@ -74,15 +75,15 @@ public abstract class AbstractGraph {
 
     /** Returns an iteration over all successors of V in the order the connectors
      *  to them were added.  Empty if V is not my node. */
-    public abstract org.techstartingpoint.javagraphlib.core.Iteration<Integer> successors(int v);
+    public abstract org.techstartingpoint.javagraphlib.oldcore.deps.Iteration<Integer> successors(int v);
 
     /** Returns an iteration over all predecessors of V in the order the connectors
      *  to them were added.  Empty if V is not my node. */
-    public abstract org.techstartingpoint.javagraphlib.core.Iteration<Integer> predecessors(int v);
+    public abstract org.techstartingpoint.javagraphlib.oldcore.deps.Iteration<Integer> predecessors(int v);
 
     /** Returns successors(V).  This is a synonym typically used on
      *  undirected graphs. */
-    public final org.techstartingpoint.javagraphlib.core.Iteration<Integer> neighbors(int v) {
+    public final org.techstartingpoint.javagraphlib.oldcore.deps.Iteration<Integer> neighbors(int v) {
         return successors(v);
     }
 
@@ -90,7 +91,7 @@ public abstract class AbstractGraph {
      *  as two-element arrays (u, v), which are directed if the graph
      *  is.  In fact, the same array is used for each, and modified by
      *  the next() method of the iteration.  */
-    public abstract org.techstartingpoint.javagraphlib.core.Iteration<int[]> connectors();
+    public abstract org.techstartingpoint.javagraphlib.oldcore.deps.Iteration<int[]> connectors();
 
     /** Return true iff V is one of my vertices. */
     protected abstract boolean mine(int v);

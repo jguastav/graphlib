@@ -2,12 +2,15 @@
 package org.techstartingpoint.javagraphlib.graphengine.impl;
 
 import org.techstartingpoint.javagraphlib.graphengine.launcher.GraphCompleteEnvironment;
+import org.techstartingpoint.javagraphlib.graphengine.model.StdOutput;
 import org.techstartingpoint.javagraphlib.model.GraphProcess;
 import org.techstartingpoint.javagraphlib.model.GraphProcessSet;
 import org.techstartingpoint.javagraphlib.services.GraphProcessSetService;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,8 +39,9 @@ public class GraphRunnerEnvironmentImpl {
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	public void run(String workflowFileName) throws IOException, URISyntaxException {
-		GraphRunnerImpl runner=new GraphRunnerImpl(environment,graphProcessService,workflowFileName,this);
+	public void run(String workflowFileName) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        environment=new GraphEnvironmentImpl();
+		GraphRunnerImpl runner=new GraphRunnerImpl(environment,new GraphProcessSetService(),workflowFileName,this);
 		runner.run();
 	}
 	

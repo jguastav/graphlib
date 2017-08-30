@@ -1,4 +1,6 @@
-package org.techstartingpoint.javagraphlib.core;
+package org.techstartingpoint.javagraphlib.oldcore;
+
+import org.techstartingpoint.javagraphlib.oldcore.deps.ConnectorFactory;
 
 import java.util.Collection;
 import java.util.Set;
@@ -20,7 +22,7 @@ public interface Graph<V,E> {
 
     Set<E> getAllConnectors(V sourceNode, V targetNode);
     E getConnector(V sourceNode, V targetNode);
-    org.techstartingpoint.javagraphlib.core.ConnectorFactory<V, E> getConnectorFactory();
+    ConnectorFactory<V, E> getConnectorFactory();
     E addConnector(V sourceNode, V targetNode);
     boolean addNode(V v);
     Set<E> connectorSet();

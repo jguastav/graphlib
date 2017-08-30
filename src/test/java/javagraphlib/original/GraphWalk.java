@@ -1,5 +1,10 @@
 package javagraphlib.original;
 
+import javagraphlib.com.onelake.api.error.OnelakeException;
+import javagraphlib.original.notgiven.*;
+
+import java.util.*;
+
 public class GraphWalk {
 
     private final Workflow workflow;
@@ -58,7 +63,7 @@ public class GraphWalk {
 
     private Component getComponent(Node node) throws OnelakeException {
         ComponentInfo componentInfo = node.getComponentInfo();
-        String actionClass = componentRepository.getComponents().get(componentInfo.getId()+"-"+componentInfo.getName()+"-"+componentInfo.getVersion());
+        String actionClass = (String) componentRepository.getComponents().get(componentInfo.getId()+"-"+componentInfo.getName()+"-"+componentInfo.getVersion());
         ClassBuilder<Component> classReader = new ClassBuilder<Component>();
         return  classReader.buildInstance(actionClass);
     }

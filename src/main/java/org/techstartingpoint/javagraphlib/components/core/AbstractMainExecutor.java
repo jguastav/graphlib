@@ -26,17 +26,15 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 	private List<Object> outputs;
 	private boolean finished=false;
 
-	
+
+
+
 	/**
 	 * akka component for akka implementation
 	 */
 	
 
-	/**
-	 * component instance when it is running
-	 */
-	private ComponentRef componentInstance;
-	
+
 	
 	/**
 	 * component name in akka context
@@ -80,7 +78,6 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 			int inputPorts,
 			int outputPorts) {
 		this.setComponentClassName(componentClassName);
-		this.setComponentImplementation(new ComponentImplementation(className));
 		this.identifier=className;
 		this.setName(name);
 		this.inputs=new ArrayList<Object>(inputPorts);
@@ -105,19 +102,20 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 		this.componentSystem = componentSystem;
 		this.componentInstanceName=instanceName;
 		System.out.println("AbstractMainExecutor.instantiate()"+this.componentInstanceName);
-        this.componentInstance =
-        		this.componentSystem.componentOf(
-        				springExtension.props(
-        						this.getComponentClassName(),
-        						this.nodeId,
-        						this.graphEnvironment,
-                                graphRunner),
-						this.componentInstanceName);
+		this.componentSystem.register(this.componentInstanceName,this);
 
 	}
-	
-	
-	public void start() throws Exception {
+
+/*
+	        				springExtension.props(
+                                    this.getComponentClassName(),
+        						this.nodeId,
+            this.graphEnvironment,
+    graphRunner),
+            this.componentInstanceName);
+*/
+
+    public void start() throws Exception {
 		send(new Object(),null);
 	}
 
@@ -131,15 +129,8 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 		
 		try {
 			System.out.println("AbstractMainExecutor.send()"+this.getNodeId());
-			if (sender== null) {
-				System.out.println("AbstractMainExecutor.send(nosender)");
-				System.out.println(this.componentInstance);
-	            this.componentInstance.tell(messageToSend, ComponentRef.noSender());
-			} else {
-				System.out.println("AbstractMainExecutor.send(sender)");
-				System.out.println(this.componentInstance);
-	            this.componentInstance.tell(messageToSend, sender.componentInstance);
-			}
+			System.out.println("AbstractMainExecutor.send(sender)");
+            this.tell(messageToSend, sender);
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.graphEnvironment.getOutput().sendMessage(this.getNodeId(), e.getMessage());
@@ -149,11 +140,66 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 		}
 	}
 
-	
+    private void tell(Object messageToSend, AbstractMainExecutor sender) {
+	    // TODO: Call method onReceive
 
 
-	
-	protected void setOutput(int index,Object o) {
+
+
+
+
+
+    }
+
+
+
+
+    // CORE EXECUTION
+
+
+    private GraphRunner runner;
+
+
+
+    /**
+     * Main entry point on receiving a message from another component or starting it
+     *
+     * @author Jose Alberto Guastavino
+     *
+     */
+    public void onReceive(Object message) throws Throwable {
+        if (this.runner!=null) {
+            this.runner.broadcast(this.nodeId, -1, message);
+        }
+        Long startedTime=System.currentTimeMillis();
+        runCore(message);
+        Long endTime=System.currentTimeMillis();
+        Long duration=endTime-startedTime;
+    }
+
+
+    /**
+     * Method each plugin element component should implement
+     *
+     * Inside elements can be calles
+     * 	setOutput(index,message): to set the message to be sent to another component
+     *  sendMessage(....) : to show information in the output console of the app
+     *  getEnvironment()... : to use shared resources of the execution runnning environment
+     *  getProperties() : to access customized data of the element setted in each instance
+     *
+     * @param message
+     * @throws Exception
+     *
+     * @author Jose Alberto Guastavino
+     *
+     */
+    protected abstract void runCore(Object message) throws Exception;
+
+
+    // END CORE EXECUTION
+
+
+    protected void setOutput(int index,Object o) {
 		this.outputs.set(index, o);
 	}
 	
@@ -250,15 +296,6 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 
 
 
-	public ComponentRef getComponentInstance() {
-		return componentInstance;
-	}
-
-
-	public void setComponentInstance(ComponentRef componentInstance) {
-		this.componentInstance = componentInstance;
-	}
-
 
 	public String getComponentInstanceName() {
 		return componentInstanceName;
@@ -283,8 +320,8 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 	@Override
 	public String toString() {
 		return String.format(
-				"AbstractMainExecutor [nodeId=%s, inputs=%s, outputs=%s, finished=%s, componentInstance=%s, componentInstanceName=%s, componentSystem=%s, identifier=%s,  graphEnvironment=%s]",
-                nodeId, inputs, outputs, finished, componentInstance, componentInstanceName, componentSystem, identifier,
+				"AbstractMainExecutor [nodeId=%s, inputs=%s, outputs=%s, finished=%s, componentInstanceName=%s, componentSystem=%s, identifier=%s,  graphEnvironment=%s]",
+                nodeId, inputs, outputs, finished,  componentInstanceName, componentSystem, identifier,
 				graphEnvironment);
 	}
 

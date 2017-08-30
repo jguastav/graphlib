@@ -24,13 +24,12 @@ public class GraphNode {
 	
 	public GraphNode(String id,
 					   String name,
-					   GraphNodeType elementType,
-					   int inputPorts, int outputPorts) {
+					   GraphNodeType elementType) {
 		this.id = id;
 	    this.name = name;
 		this.type = elementType;
-		this.inputPorts=inputPorts;
-		this.outputPorts=outputPorts;
+		this.inputPorts=elementType.getInputPorts();
+		this.outputPorts=elementType.getOutputPorts();
 		this.deleted=false;
 	}
 

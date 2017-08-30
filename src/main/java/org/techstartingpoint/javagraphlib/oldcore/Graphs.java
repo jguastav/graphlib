@@ -1,4 +1,4 @@
-package org.techstartingpoint.javagraphlib.core;
+package org.techstartingpoint.javagraphlib.oldcore;
 
 
 //TODO: Rebuild all this class
@@ -16,7 +16,7 @@ import java.util.Set;
 public class Graphs {
     /**
      * Creates a new connector and adds it to the specified graph similarly to the
-     * {@link org.techstartingpoint.javagraphlib.core.Graph#addConnector(Object, Object)} method.
+     * {@link org.techstartingpoint.javagraphlib.oldcore.Graph#addConnector(Object, Object)} method.
      *
      * @param g the graph for which the connector to be added
      * @param sourceNode source node of the connector
@@ -28,9 +28,9 @@ public class Graphs {
      * @return The newly created connector if added to the graph, otherwise <code>
      * null</code>.
      *
-     * @see org.techstartingpoint.javagraphlib.core.Graph#addConnector(Object, Object)
+     * @see org.techstartingpoint.javagraphlib.oldcore.Graph#addConnector(Object, Object)
      */
-    public static <V,E> void ddConnector(org.techstartingpoint.javagraphlib.core.Graph<V, E> g, V sourceNode, V targetNode, double weight)
+    public static <V,E> void ddConnector(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> g, V sourceNode, V targetNode, double weight)
     {
 
         // we first create the connector and set the weight to make sure that
@@ -43,7 +43,7 @@ public class Graphs {
     /**
      * Adds the specified source and target vertices to the graph, if not already included, and
      * creates a new connector and adds it to the specified graph similarly to the
-     * {@link org.techstartingpoint.javagraphlib.core.Graph#addConnector(Object, Object)} method.
+     * {@link org.techstartingpoint.javagraphlib.oldcore.Graph#addConnector(Object, Object)} method.
      *
      * @param g the graph for which the specified connector to be added
      * @param sourceNode source node of the connector
@@ -54,7 +54,7 @@ public class Graphs {
      * @return The newly created connector if added to the graph, otherwise <code>
      * null</code>.
      */
-    public static <V, E> E addConnectorWithVertices(org.techstartingpoint.javagraphlib.core.Graph<V, E> g, V sourceNode, V targetNode)
+    public static <V, E> E addConnectorWithVertices(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> g, V sourceNode, V targetNode)
     {
         g.addNode(sourceNode);
         g.addNode(targetNode);
@@ -79,16 +79,18 @@ public class Graphs {
      * @return <tt>true</tt> if this graph changed as a result of the call
      */
     public static <V, E> void addAllConnectors(
-            org.techstartingpoint.javagraphlib.core.Graph<? super V, ? super E> destination, org.techstartingpoint.javagraphlib.core.Graph<V, E> source, Collection<? extends E> connectors)
+            org.techstartingpoint.javagraphlib.oldcore.Graph<? super V, ? super E> destination, org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> source, Collection<? extends E> connectors)
     {
         boolean modified = false;
 
+        /*
         for (E e : connectors) {
             V s = source.getConnectorSource(e);
             V t = source.getConnectorTarget(e);
             destination.addNode(s);
             destination.addNode(t);
         }
+        */
 
         return;
     }
@@ -96,7 +98,7 @@ public class Graphs {
     /**
      * Adds all of the specified vertices to the destination graph. The behavior of this operation
      * is undefined if the specified node collection is modified while the operation is in
-     * progress. This method will invoke the {@link org.techstartingpoint.javagraphlib.core.Graph#addNode(Object)} method.
+     * progress. This method will invoke the {@link org.techstartingpoint.javagraphlib.oldcore.Graph#addNode(Object)} method.
      *
      * @param destination the graph to which connectors are to be added
      * @param vertices the vertices to be added to the graph
@@ -109,10 +111,10 @@ public class Graphs {
      *         if the specified node collection is <tt>
      * null</tt>.
      *
-     * @see org.techstartingpoint.javagraphlib.core.Graph#addNode(Object)
+     * @see org.techstartingpoint.javagraphlib.oldcore.Graph#addNode(Object)
      */
     public static <V, E> boolean addAllVertices(
-            org.techstartingpoint.javagraphlib.core.Graph<? super V, ? super E> destination, Collection<? extends V> vertices)
+            org.techstartingpoint.javagraphlib.oldcore.Graph<? super V, ? super E> destination, Collection<? extends V> vertices)
     {
         boolean modified = false;
 
@@ -128,7 +130,7 @@ public class Graphs {
      * multigraph vertices may appear more than once in the returned list.
      *
      * <p>
-     * The method uses {@link org.techstartingpoint.javagraphlib.core.Graph#connectorsOf(Object)} to traverse the graph.
+     * The method uses {@link org.techstartingpoint.javagraphlib.oldcore.Graph#connectorsOf(Object)} to traverse the graph.
      *
      * @param g the graph to look for neighbors in
      * @param node the node to get the neighbors of
@@ -137,7 +139,7 @@ public class Graphs {
      *
      * @return a list of the vertices that are the neighbors of the specified node.
      */
-    public static <V, E> List<V> neighborListOf(org.techstartingpoint.javagraphlib.core.Graph<V, E> g, V node)
+    public static <V, E> List<V> neighborListOf(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> g, V node)
     {
         List<V> neighbors = new ArrayList<>();
 
@@ -153,7 +155,7 @@ public class Graphs {
      * graph is a multigraph, vertices may appear more than once in the returned list.
      *
      * <p>
-     * The method uses {@link org.techstartingpoint.javagraphlib.core.Graph#incomingConnectorsOf(Object)} to traverse the graph.
+     * The method uses {@link org.techstartingpoint.javagraphlib.oldcore.Graph#incomingConnectorsOf(Object)} to traverse the graph.
      *
      * @param g the graph to look for predecessors in
      * @param node the node to get the predecessors of
@@ -162,7 +164,7 @@ public class Graphs {
      *
      * @return a list of the vertices that are the direct predecessors of the specified node.
      */
-    public static <V, E> List<V> predecessorListOf(org.techstartingpoint.javagraphlib.core.Graph<V, E> g, V node)
+    public static <V, E> List<V> predecessorListOf(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> g, V node)
     {
         List<V> predecessors = new ArrayList<>();
         Set<? extends E> connectors = g.incomingConnectorsOf(node);
@@ -179,7 +181,7 @@ public class Graphs {
      * is a multigraph vertices may appear more than once in the returned list.
      *
      * <p>
-     * The method uses {@link org.techstartingpoint.javagraphlib.core.Graph#outgoingConnectorsOf(Object)} to traverse the graph.
+     * The method uses {@link org.techstartingpoint.javagraphlib.oldcore.Graph#outgoingConnectorsOf(Object)} to traverse the graph.
      *
      * @param g the graph to look for successors in
      * @param node the node to get the successors of
@@ -188,7 +190,7 @@ public class Graphs {
      *
      * @return a list of the vertices that are the direct successors of the specified node.
      */
-    public static <V, E> List<V> successorListOf(org.techstartingpoint.javagraphlib.core.Graph<V, E> g, V node)
+    public static <V, E> List<V> successorListOf(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> g, V node)
     {
         List<V> successors = new ArrayList<>();
         Set<? extends E> connectors = g.outgoingConnectorsOf(node);
@@ -212,7 +214,7 @@ public class Graphs {
      *
      * @return node opposite to v across e
      */
-    public static <V, E> V getOppositeNode(org.techstartingpoint.javagraphlib.core.Graph<V, E> g, E e, V v)
+    public static <V, E> V getOppositeNode(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> g, E e, V v)
     {
         V source = g.getConnectorSource(e);
         V target = g.getConnectorTarget(e);
@@ -233,7 +235,7 @@ public class Graphs {
      * @param <V> the graph node type
      * @param <E> the graph connector type
      */
-    public static <V, E> void addOutgoingConnectors(org.techstartingpoint.javagraphlib.core.Graph<V, E> graph, V source, Iterable<V> targets)
+    public static <V, E> void addOutgoingConnectors(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> graph, V source, Iterable<V> targets)
     {
         if (!graph.containsNode(source)) {
             graph.addNode(source);
@@ -248,7 +250,7 @@ public class Graphs {
 
     /**
      * Add connectors from multiple source vertices to one target node. Whether duplicates are created
-     * depends on the underlying {@link org.techstartingpoint.javagraphlib.core.Graph} implementation.
+     * depends on the underlying {@link org.techstartingpoint.javagraphlib.oldcore.Graph} implementation.
      *
      * @param graph graph to be mutated
      * @param target target node for the new connectors
@@ -256,7 +258,7 @@ public class Graphs {
      * @param <V> the graph node type
      * @param <E> the graph connector type
      */
-    public static <V, E> void addIncomingConnectors(org.techstartingpoint.javagraphlib.core.Graph<V, E> graph, V target, Iterable<V> sources)
+    public static <V, E> void addIncomingConnectors(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> graph, V target, Iterable<V> sources)
     {
         if (!graph.containsNode(target)) {
             graph.addNode(target);
@@ -279,7 +281,7 @@ public class Graphs {
      *
      * @return true if the node has any successors, false otherwise
      */
-    public static <V, E> boolean nodeHasSuccessors(org.techstartingpoint.javagraphlib.core.Graph<V, E> graph, V node)
+    public static <V, E> boolean nodeHasSuccessors(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> graph, V node)
     {
         return !graph.outgoingConnectorsOf(node).isEmpty();
     }
@@ -294,7 +296,7 @@ public class Graphs {
      *
      * @return true if the node has any predecessors, false otherwise
      */
-    public static <V, E> boolean nodeHasPredecessors(org.techstartingpoint.javagraphlib.core.Graph<V, E> graph, V node)
+    public static <V, E> boolean nodeHasPredecessors(org.techstartingpoint.javagraphlib.oldcore.Graph<V, E> graph, V node)
     {
         return !graph.incomingConnectorsOf(node).isEmpty();
     }

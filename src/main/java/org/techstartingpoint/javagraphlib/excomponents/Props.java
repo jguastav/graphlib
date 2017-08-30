@@ -5,8 +5,17 @@ import org.techstartingpoint.javagraphlib.graphengine.GraphRunner;
 
 import java.util.Map;
 
+
+
+
+
 public class Props {
-    public static Props create(Class classToLoad, String fluxId, GraphEnvironment graphEnvironment, GraphRunner graphRunner) {
+
+
+
+
+
+    public static Props create(Class classToLoad, String graphId, GraphEnvironment graphEnvironment, GraphRunner graphRunner) {
         // TOOD: Implement or erase
         return null;
     }

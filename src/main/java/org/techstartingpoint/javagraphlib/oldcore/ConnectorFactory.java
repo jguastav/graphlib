@@ -1,4 +1,4 @@
-package org.techstartingpoint.javagraphlib.core;
+package org.techstartingpoint.javagraphlib.oldcore;
 
 public interface ConnectorFactory<V, E>
 {

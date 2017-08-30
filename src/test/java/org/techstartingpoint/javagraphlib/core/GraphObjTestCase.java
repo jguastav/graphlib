@@ -12,7 +12,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dgraphObjConst() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         assertTrue(dg.getSuccessorData().isEmpty());
         assertTrue(dg.getPredecessorData().isEmpty());
         assertTrue(dg.getNodes().isEmpty());
@@ -20,27 +20,27 @@ public class GraphObjTestCase {
 
     @Test
     public void dgvertexSizeinit() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         assertEquals(0, dg.vertexSize());
     }
 
 
     @Test
     public void dgmaxVertexinit() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         assertEquals(0, dg.maxVertex());
     }
 
     @Test
     public void dgedgeSizeinit() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         assertEquals(0, dg.edgeSize());
     }
 
     /** 10 */
     @Test
     public void dgoutDegreeinit() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         assertEquals(0, dg.outDegree(5));
         assertEquals(0, dg.outDegree(1));
         assertEquals(0, dg.outDegree(100));
@@ -49,7 +49,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dginDegreeinit() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         assertEquals(0, dg.inDegree(5));
         assertEquals(0, dg.inDegree(1));
         assertEquals(0, dg.inDegree(10));
@@ -58,7 +58,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dgcontainsinit() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         assertFalse(dg.contains(1));
         assertFalse(dg.contains(2));
         assertFalse(dg.contains(0));
@@ -67,7 +67,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dgcontaininit() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         assertFalse(dg.contains(1, 3));
         assertFalse(dg.contains(3, 4));
         assertFalse(dg.contains(5, 32));
@@ -124,11 +124,11 @@ public class GraphObjTestCase {
 
     @Test
     public void dntestaddinit() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         assertTrue(ug.getSuccessorData().containsKey(1));
         assertTrue(ug.getSuccessorData().get(1).isEmpty());
-        org.techstartingpoint.javagraphlib.core.DirectedGraph g = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph g = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         g.add();
         g.add();
         g.add();
@@ -187,7 +187,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dgextensiveadd() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         assertEquals(1, ug.vertexSize());
         assertEquals(1, ug.maxVertex());
@@ -196,7 +196,7 @@ public class GraphObjTestCase {
         assertEquals(0, ug.inDegree(3));
         assertTrue(ug.contains(1));
         assertFalse(ug.contains(1, 3));
-        org.techstartingpoint.javagraphlib.core.DirectedGraph g = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph g = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         g.add();
         g.add();
         g.add();
@@ -272,7 +272,7 @@ public class GraphObjTestCase {
 */
     @Test
     public void dtestfirst() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add(1, 2);
@@ -308,7 +308,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dtestsecond() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add(1, 2);
@@ -333,7 +333,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dremoveone() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -352,7 +352,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dremovetwo() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add(1, 2);
@@ -376,7 +376,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dtestSuccessor() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -397,7 +397,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dtestdobleadd() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add(1, 2);
@@ -414,7 +414,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dpredecessor() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -487,7 +487,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dsuccessors() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -498,6 +498,7 @@ public class GraphObjTestCase {
         ug.add(1, 4);
         ug.add(4, 2);
         ArrayList<Integer> newresult = new ArrayList<Integer>();
+        /*
         for (int x : ug.successors(3)) {
             newresult.add(x);
         }
@@ -506,6 +507,7 @@ public class GraphObjTestCase {
         for (int x : ug.successors(1)) {
             result.add(x);
         }
+        */
         int first = result.get(0);
         int second = result.get(1);
         assertEquals(2, result.size());
@@ -516,7 +518,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dremovevertexTest() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -530,9 +532,11 @@ public class GraphObjTestCase {
         assertFalse(ug.contains(4));
         assertEquals(2, ug.getSuccessorData().get(2).size());
         ArrayList<Integer> result = new ArrayList<Integer>();
+        /*
         for (int x : ug.successors(2)) {
             result.add(x);
         }
+        */
         assertEquals(2, result.size());
         int first = ug.successor(2, 0);
         int second = ug.successor(2, 1);
@@ -547,7 +551,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dtestsucpred() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -558,7 +562,7 @@ public class GraphObjTestCase {
 
     @Test
     public void testDedgesize() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -571,7 +575,7 @@ public class GraphObjTestCase {
 
     @Test
     public void testadd() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         dg.add();
         dg.add();
         dg.add();
@@ -614,7 +618,7 @@ public class GraphObjTestCase {
 */
     @Test
     public void testaddlast() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph dg =  new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph dg =  new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         dg.add();
         dg.add(1, 1);
         dg.add(1, 1);
@@ -624,7 +628,7 @@ public class GraphObjTestCase {
 
     @Test
     public void addremove() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -681,7 +685,7 @@ public class GraphObjTestCase {
 
     @Test
     public void dchecedge() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add(1, 1);
         assertEquals(1, ug.edgeSize());
@@ -711,7 +715,7 @@ public class GraphObjTestCase {
     */
     @Test
     public void newedgesizeDir() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();
@@ -732,7 +736,7 @@ public class GraphObjTestCase {
 
     @Test
     public void nedgesizeDir() {
-        org.techstartingpoint.javagraphlib.core.DirectedGraph ug = new org.techstartingpoint.javagraphlib.core.DirectedGraph();
+        org.techstartingpoint.javagraphlib.oldcore.DirectedGraph ug = new org.techstartingpoint.javagraphlib.oldcore.DirectedGraph();
         ug.add();
         ug.add();
         ug.add();

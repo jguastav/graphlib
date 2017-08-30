@@ -5,6 +5,7 @@ import org.techstartingpoint.javagraphlib.components.core.AbstractGraphLibCompon
 import org.techstartingpoint.javagraphlib.components.core.AbstractMainBaseComponent;
 import org.techstartingpoint.javagraphlib.components.core.AbstractMainExecutor;
 import org.techstartingpoint.javagraphlib.model.GraphPlugin;
+import org.techstartingpoint.javagraphlib.model.json.NodeConfiguration;
 import org.techstartingpoint.javagraphlib.springmock.*;
 
 import java.io.File;
@@ -34,13 +35,13 @@ import java.util.zip.ZipInputStream;
  */
 public class PluginLoader {
 	
-	private static String[] exclusions={"org.xml.sax.","javax.xml.","org.apache.xmlcommons.Version","org.w3c.dom." };
-	
-	
+
+
 	/**
 	 * Get an instance of a class provided by a plugin
 	 * @param className
-	 * @return
+	 * @param environmentKey
+     * @return
 	 * @throws MalformedURLException
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
@@ -54,10 +55,23 @@ public class PluginLoader {
 	 * @author Jose Alberto Guastavino
 	 *
 	 */
-	public static Object getInstance(String className) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, URISyntaxException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
+	public static AbstractMainBaseComponent getInstance(String className,
+                                                        String environmentKey,
+                                                        NodeConfiguration nodeConfiguration)
+            throws MalformedURLException,
+                ClassNotFoundException,
+                InstantiationException,
+                IllegalAccessException,
+                URISyntaxException,
+                NoSuchMethodException,
+                SecurityException,
+                IllegalArgumentException,
+                InvocationTargetException {
 	    final URLClassLoader sysloader = (URLClassLoader) AbstractMainExecutor.class.getClassLoader();
 		Class classToLoad = Class.forName (className, true, sysloader);
-		Object instance = classToLoad.newInstance ();		
+        AbstractMainBaseComponent instance = (AbstractMainBaseComponent) classToLoad.newInstance ();
+        instance.setNodeConfiguration(nodeConfiguration);
+        instance.setEnvironmentKey(environmentKey);
 		return  instance;
 		
 	}

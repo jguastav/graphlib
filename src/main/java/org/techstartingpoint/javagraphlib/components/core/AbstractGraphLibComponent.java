@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Jose Alberto Guastavino
  *
  */
-public abstract class AbstractGraphLibComponent extends UntypedAbstractComponent {
+public abstract class AbstractGraphLibComponent extends AbstractMainBaseComponent {
 	
 	
 	// Global Elements
@@ -34,11 +34,10 @@ public abstract class AbstractGraphLibComponent extends UntypedAbstractComponent
 
 	/**
 	 * Main entry point on receiving a message from another component or starting it
-	 * 
+	 *
 	 * @author Jose Alberto Guastavino
 	 *
 	 */
-	@Override
 	public void onReceive(Object message) throws Throwable {
 		if (this.runner!=null) {
 			this.runner.broadcast(this.nodeId, -1, message);

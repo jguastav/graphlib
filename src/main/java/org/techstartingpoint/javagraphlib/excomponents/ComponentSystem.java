@@ -1,16 +1,31 @@
 package org.techstartingpoint.javagraphlib.excomponents;
 
+import org.techstartingpoint.javagraphlib.components.core.AbstractMainExecutor;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class ComponentSystem {
-    public ComponentRef componentOf(Props props, String componentInstanceName) {
-        // TODO: implement
-        return null;
+
+    String name;
+    Map<String,AbstractMainExecutor> components;
+
+    public AbstractMainExecutor register(String componentInstanceName,AbstractMainExecutor executor) {
+        components.put(componentInstanceName,executor);
+        return executor;
     }
 
-    public static ComponentSystem create(String s) {
-        return null;
+    private ComponentSystem(String name) {
+        this.name=name;
+        this.components=new HashMap<String,AbstractMainExecutor>();
     }
 
-    public void stop(ComponentRef currentComponent) {
+    public static ComponentSystem create(String name) {
+        ComponentSystem result=new ComponentSystem(name);
+        return result;
+    }
+
+    public void stop(AbstractMainExecutor currentComponent) {
     }
 
     public void terminate() {

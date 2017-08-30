@@ -3,6 +3,7 @@ package org.techstartingpoint.javagraphlib.graphengine.impl;
 
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map.Entry;
@@ -15,7 +16,7 @@ import org.techstartingpoint.javagraphlib.components.core.AbstractMainExecutor;
 import org.techstartingpoint.javagraphlib.graphengine.GraphRunner;
 import org.techstartingpoint.javagraphlib.graphengine.launcher.GraphCompleteEnvironment;
 import org.techstartingpoint.javagraphlib.graphengine.launcher.GraphRunnerLauncher;
-import org.techstartingpoint.javagraphlib.model.GraphExecutionConnector;
+import org.techstartingpoint.javagraphlib.model.GraphExecutionConnection;
 import org.techstartingpoint.javagraphlib.model.GraphExecutionModel;
 import org.techstartingpoint.javagraphlib.model.GraphProcess;
 import org.techstartingpoint.javagraphlib.services.GraphProcessSetService;
@@ -36,6 +37,10 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+
+
+
 
 	
 	/**
@@ -87,15 +92,15 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	public GraphRunnerImpl(GraphCompleteEnvironment fluxEnvironment,
+	public GraphRunnerImpl(GraphCompleteEnvironment graphEnvironment,
 						   GraphProcessSetService workflowService,
 						   String workflowFileName,
-						   GraphRunnerEnvironmentImpl graphRunnerEnvironment) throws IOException, URISyntaxException {
+						   GraphRunnerEnvironmentImpl graphRunnerEnvironment) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		this.workflow =workflowService.getGraphProcess(workflowFileName);
 		// retrieve workflow
 
-        StaticLoggerBinder a;
-        this.environment=fluxEnvironment;
+
+        this.environment=graphEnvironment;
 		//CheckCycle checkCycle=new CheckCycle();
 		//this.isCyclic=checkCycle.checkCycle(this.workflow.getNodeList(), this.workflow.getConnectorList());
 		// this.environment.sendMessage(-1L, "jobName:"+jobName+" workflow:"+activityName+" cyclic:"+this.isCyclic);
@@ -118,7 +123,8 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	private void runExecutors(GraphExecutionModel executionModel) throws Exception {
 		// main cycle
 		GraphExtensionImpl springExtension=new GraphExtensionImpl();
-		this.componentSystem = ComponentSystem.create(this.workflow.getName().replace(' ','_')+"_"+ GraphUtils.getNowId());
+		this.componentSystem = ComponentSystem.create(
+		        this.workflow.getName().replace(' ','_')+"_"+ GraphUtils.getNowId());
 		// start all executors
 		// makes all executors begin to listen to messages
 		int idInstanceIndex=1;
@@ -149,7 +155,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * 
 	 */
 	private boolean hasNoPredecessors(String executorKey) {
-		List<GraphExecutionConnector> connectors=this.executionModel.getConnectors();
+		List<GraphExecutionConnection> connectors=this.executionModel.getConnectors();
 		boolean result=true;
 		boolean found=false;
 		for (int i=0;i<connectors.size() && !found;i++) {
@@ -203,10 +209,10 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * 
 	 */
 	public void broadcast(String fluxId, int outputIndex, Object value) throws Exception {
-		List<GraphExecutionConnector> connectors=this.executionModel.getConnectors();
+		List<GraphExecutionConnection> connectors=this.executionModel.getConnectors();
 		AbstractMainExecutor executor=this.executionModel.getExecutors().get(fluxId);
 		if (outputIndex>0 && executor.getOutputPorts()>0) {
-			for (GraphExecutionConnector thisConnector:connectors) {
+			for (GraphExecutionConnection thisConnector:connectors) {
 				if (thisConnector.getSourceExecutionId().equals(executor.getNodeId()) && thisConnector.getSourceIndex()==outputIndex) {
 					AbstractMainExecutor target=this.executionModel.getExecutors().get(thisConnector.getTargetExecutionId());
 					this.executionEnvironment.run(target);
@@ -229,8 +235,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 		try {
 			for (Entry<String,AbstractMainExecutor> executorEntry:this.executionModel.getExecutors().entrySet()) {
 				AbstractMainExecutor executor=executorEntry.getValue();
-				ComponentRef currentComponent=executor.getComponentInstance();
-				this.componentSystem.stop(currentComponent);
+				this.componentSystem.stop(executor);
 			}
 			this.componentSystem.terminate(); // TODO: Its a future- confirma termination
 		} catch (Exception e) {
