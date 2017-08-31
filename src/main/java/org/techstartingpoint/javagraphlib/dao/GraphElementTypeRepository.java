@@ -1,6 +1,6 @@
 
 package org.techstartingpoint.javagraphlib.dao;
-import org.techstartingpoint.javagraphlib.model.GraphNodeType;
+import org.techstartingpoint.javagraphlib.graph.GraphNodeType;
 import org.techstartingpoint.javagraphlib.springmock.MongoRepository;
 
 import java.util.List;

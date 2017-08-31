@@ -18,7 +18,7 @@ public class JsonParser<T> {
             return (T) gson.fromJson(json, c);
         } catch (Exception e) {
             logger.info(javagraphlib.com.onelake.api.error.WorkflowErrorCode.JsonParserError.getMessage());
-            throw OnelakeException.build(WorkflowErrorCode.JsonParserError, e).set("json", json).set("class", c);
+            throw OnelakeException.build(WorkflowErrorCode.JsonParserError, e).set("workflow", json).set("class", c);
         }
     }
 }

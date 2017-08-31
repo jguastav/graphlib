@@ -1,6 +1,6 @@
 package org.techstartingpoint.javagraphlib.oldcore;
 
-import org.techstartingpoint.javagraphlib.components.Component;
+import org.techstartingpoint.javagraphlib.execution.Component;
 
 public interface Port {
     public Component getParent();

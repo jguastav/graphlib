@@ -1,7 +1,7 @@
 package org.techstartingpoint.javagraphlib.springmock;
 
-import org.techstartingpoint.javagraphlib.model.GraphNodeType;
-import org.techstartingpoint.javagraphlib.model.GraphProcessSet;
+import org.techstartingpoint.javagraphlib.graph.GraphNodeType;
+import org.techstartingpoint.javagraphlib.execution.GraphProcessSet;
 
 public interface MongoRepository<T, T1> {
     GraphProcessSet save(GraphProcessSet job);

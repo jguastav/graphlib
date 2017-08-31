@@ -14,11 +14,13 @@ import java.util.Map;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.techstartingpoint.javagraphlib.dao.GraphProcessMongoRepository;
-import org.techstartingpoint.javagraphlib.model.*;
-import org.techstartingpoint.javagraphlib.model.json.Connection;
-import org.techstartingpoint.javagraphlib.model.json.Node;
-import org.techstartingpoint.javagraphlib.model.json.Workflow;
+import org.techstartingpoint.javagraphlib.execution.GraphProcess;
+import org.techstartingpoint.javagraphlib.graph.GraphConnection;
+import org.techstartingpoint.javagraphlib.graph.GraphNode;
+import org.techstartingpoint.javagraphlib.graph.GraphNodeType;
+import org.techstartingpoint.javagraphlib.model.workflow.Connection;
+import org.techstartingpoint.javagraphlib.model.workflow.Node;
+import org.techstartingpoint.javagraphlib.model.workflow.Workflow;
 
 /**
  * 
@@ -41,7 +43,7 @@ public class GraphProcessSetService {
      */
     public GraphProcess getGraphProcess(String workflowFileName) throws IOException, URISyntaxException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
-        // read json
+        // read workflow
         String jsonWorkflowString=readJson(workflowFileName);
 
         // generate object java
@@ -91,7 +93,7 @@ public class GraphProcessSetService {
 
 
     /**
-     * Generate plain Workflow object from json string
+     * Generate plain Workflow object from workflow string
      * @param jsonWorkflowString
      * @return
      */
@@ -104,7 +106,7 @@ public class GraphProcessSetService {
 
 
     /**
-     * Read a json from file and returns the json in a String
+     * Read a workflow from file and returns the workflow in a String
      * @param fileName
      * @return
      * @throws URISyntaxException

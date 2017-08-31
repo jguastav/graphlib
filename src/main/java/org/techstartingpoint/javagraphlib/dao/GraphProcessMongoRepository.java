@@ -1,11 +1,9 @@
 
 package org.techstartingpoint.javagraphlib.dao;
 
-import org.techstartingpoint.javagraphlib.model.GraphProcessSet;
+import org.techstartingpoint.javagraphlib.execution.GraphProcessSet;
 import org.techstartingpoint.javagraphlib.springmock.MongoRepository;
 import org.techstartingpoint.javagraphlib.springmock.QueryDslPredicateExecutor;
-
-import java.util.List;
 
 
 /**

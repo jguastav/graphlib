@@ -1,14 +1,14 @@
 package org.techstartingpoint.javagraphlib;
 
 
-import org.techstartingpoint.javagraphlib.graphengine.impl.GraphRunnerEnvironmentImpl;
+import org.techstartingpoint.javagraphlib.execution.GraphRunnerEnvironmentImpl;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 
 /**
- * Application to load and run a flow based on a json files referencing to existing classes components
+ * Application to load and run a flow based on a workflow files referencing to existing classes components
  */
 public class App {
 

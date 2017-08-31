@@ -3,7 +3,7 @@ package javagraphlib.original;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.techstartingpoint.javagraphlib.model.json.ComponentInfo;
+import org.techstartingpoint.javagraphlib.model.workflow.ComponentInfo;
 
 public class Node {
 

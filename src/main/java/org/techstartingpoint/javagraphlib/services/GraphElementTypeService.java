@@ -1,18 +1,13 @@
 
 package org.techstartingpoint.javagraphlib.services;
 
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.techstartingpoint.javagraphlib.dao.GraphElementTypeRepository;
-import org.techstartingpoint.javagraphlib.model.*;
+import org.techstartingpoint.javagraphlib.graph.GraphNodeType;
 
 
 /**

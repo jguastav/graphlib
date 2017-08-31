@@ -1,12 +1,7 @@
 package org.techstartingpoint.javagraphlib.excomponents;
 
-import org.techstartingpoint.javagraphlib.graphengine.GraphEnvironment;
-import org.techstartingpoint.javagraphlib.graphengine.GraphRunner;
-
-import java.util.Map;
-
-
-
+import org.techstartingpoint.javagraphlib.execution.GraphEnvironment;
+import org.techstartingpoint.javagraphlib.execution.GraphRunner;
 
 
 public class Props {

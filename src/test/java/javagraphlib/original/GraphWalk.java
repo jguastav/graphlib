@@ -2,7 +2,7 @@ package javagraphlib.original;
 
 import javagraphlib.com.onelake.api.error.OnelakeException;
 import javagraphlib.original.notgiven.*;
-import org.techstartingpoint.javagraphlib.model.json.ComponentInfo;
+import org.techstartingpoint.javagraphlib.model.workflow.ComponentInfo;
 
 import java.util.*;
 

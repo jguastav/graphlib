@@ -1,6 +1,6 @@
 package org.techstartingpoint.javagraphlib.excomponents;
 
-import org.techstartingpoint.javagraphlib.components.core.AbstractMainExecutor;
+import org.techstartingpoint.javagraphlib.api.AbstractMainExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
