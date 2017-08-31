@@ -49,10 +49,6 @@ public class GraphExecutionModel {
 	public void setConnectors(List<GraphExecutionConnection> connectors) {
 		this.connectors = connectors;
 	}
-	@Override
-	public String toString() {
-		return String.format("GraphExecutionModel [\n\texecutors=%s, \n\tconnectors=%s]", executors, connectors);
-	}
 	public Map<String, String> getInitialNodes() {
 		return initialNodes;
 	}
@@ -65,9 +61,13 @@ public class GraphExecutionModel {
 	public void setFinalNodes(Map<String, String> finalNodes) {
 		this.finalNodes = finalNodes;
 	}
-	
-	
-	
+
+
+	@Override
+	public String toString() {
+		return String.format("GraphExecutionModel [\n\texecutors=%s, \n\tconnectors=%s]", executors, connectors);
+	}
+
 	
 
 }
