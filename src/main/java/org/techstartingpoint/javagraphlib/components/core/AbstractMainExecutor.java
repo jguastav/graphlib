@@ -22,8 +22,8 @@ import java.util.Map;
  */
 public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 	private String nodeId;
-	private List<Object> inputs;
-	private List<Object> outputs;
+	private List<ExecutionPort> inputs;
+	private List<ExecutionPort> outputs;
 	private boolean finished=false;
 
 
@@ -80,13 +80,13 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 		this.setComponentClassName(componentClassName);
 		this.identifier=className;
 		this.setName(name);
-		this.inputs=new ArrayList<Object>(inputPorts);
+		this.inputs=new ArrayList<ExecutionPort>(inputPorts);
 		for (int i=0;i<inputPorts;i++) {
-			inputs.add(null);
+			inputs.add(new ExecutionPort(i,Integer.toString(i),null,null,false));
 		}
-		this.outputs=new ArrayList<Object>(outputPorts);
+		this.outputs=new ArrayList<ExecutionPort>(outputPorts);
 		for (int i=0;i<outputPorts;i++) {
-			outputs.add(null);
+            outputs.add(new ExecutionPort(i,Integer.toString(i),null,null,false));
 		}
 		this.setInputPorts(inputPorts);
 		this.setOutputPorts(outputPorts);
@@ -102,8 +102,8 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 		this.componentSystem = componentSystem;
 		this.componentInstanceName=instanceName;
 		System.out.println("AbstractMainExecutor.instantiate()"+this.componentInstanceName);
+		System.out.println(this.getName()+":"+this.getNodeId());
 		this.componentSystem.register(this.componentInstanceName,this);
-
 	}
 
 /*
@@ -199,23 +199,23 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
     // END CORE EXECUTION
 
 
-    protected void setOutput(int index,Object o) {
+    protected void setOutput(int index,ExecutionPort o) {
 		this.outputs.set(index, o);
 	}
 	
-	public List<Object> getInputs() {
+	public List<ExecutionPort> getInputs() {
 		return inputs;
 	}
 
-	public void setInputs(List<Object> inputs) {
+	public void setInputs(List<ExecutionPort> inputs) {
 		this.inputs = inputs;
 	}
 
-	public List<Object> getOutputs() {
+	public List<ExecutionPort> getOutputs() {
 		return outputs;
 	}
 
-	public void setOutputs(List<Object> outputs) {
+	public void setOutputs(List<ExecutionPort> outputs) {
 		this.outputs = outputs;
 	}
 

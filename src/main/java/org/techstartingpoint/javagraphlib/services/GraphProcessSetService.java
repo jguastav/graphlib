@@ -65,7 +65,7 @@ public class GraphProcessSetService {
         for (Node node:jsonWorkflow.getNodes()) {
             String implementationName=BASE_PACKAGE+node.getComponent_info().getName();
             GraphNodeType nodeType=new GraphNodeType(implementationName,node.getEnvironment_key(),node.getConf());
-            GraphNode graphNode = new GraphNode(node.getId(),implementationName,nodeType);
+            GraphNode graphNode = new GraphNode(node.getId(),implementationName,nodeType,node.getEnvironment_key(),node.getConf());
             graphProcess.getNodeList().add(graphNode);
             nodeMap.put(node.getId(),graphNode);
         };

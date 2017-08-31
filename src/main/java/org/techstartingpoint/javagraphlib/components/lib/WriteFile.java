@@ -26,11 +26,11 @@ public class WriteFile extends AbstractMainExecutor {
     }
 
     public WriteFile() {
-        super("ReadFile",
+        super("WriteFile",
                 "org.techstartingpoint.javagraphlib.components.lib.Filter",
                 "org.techstartingpoint.javagraphlib.components.lib.Filter",
                 1,
-                1);
+                0);
     }
 
 }

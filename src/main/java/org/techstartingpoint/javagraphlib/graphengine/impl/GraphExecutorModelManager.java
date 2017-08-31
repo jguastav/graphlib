@@ -26,7 +26,7 @@ public class GraphExecutorModelManager {
 	/**
 	 * Instantiate initially all akka excomponents that will participate in the activity execution
 	 * It generates a flat graph that includes all subflows
-	 * @param graphVertices
+	 * @param graphNodes
 	 * @return
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
@@ -43,53 +43,53 @@ public class GraphExecutorModelManager {
 	 */
 	public static GraphExecutionModel generateExecutionModel(
 			GraphExecutionModel executionModel,
-			String prefix,
-			List<GraphNode> graphVertices,
+			List<GraphNode> graphNodes,
 			List<GraphConnection> graphConnections,
 			GraphCompleteEnvironment environment)
 					throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, NoSuchMethodException, InvocationTargetException, URISyntaxException {
 		GraphExecutionModel result=executionModel;
-		for (GraphNode graphNode : graphVertices) {
+		for (GraphNode graphNode : graphNodes) {
 			try {
-						AbstractMainExecutor executorElement =buildComponentExecutor(graphNode,prefix,environment);
+						AbstractMainExecutor executorElement =buildComponentExecutor(graphNode,environment);
 						result.getExecutors().put(executorElement.getNodeId().toString(),executorElement);
-						environment.showMessage(prefix+ graphNode.getId(), "added class "+executorElement.getComponentClassName());
-						break;
+						environment.showMessage(graphNode.getId(), "added class "+executorElement.getComponentClassName());
 			} catch (ClassNotFoundException e) {
-				environment.getOutput().sendMessage(prefix+ graphNode.getId(), e.getMessage());
+				environment.getOutput().sendMessage( graphNode.getId(), e.getMessage());
 				e.printStackTrace();
 				throw e;
 			} catch (InstantiationException e) {
-				environment.showMessage(prefix+ graphNode.getId(), e.getMessage());
+				environment.showMessage( graphNode.getId(), e.getMessage());
 				e.printStackTrace();
 				throw e;
 			} catch (IllegalAccessException e) {
-				environment.showMessage(prefix+ graphNode.getId(), e.getMessage());
+				environment.showMessage( graphNode.getId(), e.getMessage());
 				e.printStackTrace();
 				throw e;
 			} catch (SecurityException e) {
-				environment.showMessage(prefix+ graphNode.getId(), e.getMessage());
+				environment.showMessage( graphNode.getId(), e.getMessage());
 				e.printStackTrace();
 				throw e;
 			} catch (IllegalArgumentException e) {
-				environment.showMessage(prefix+ graphNode.getId(), e.getMessage());
+				environment.showMessage( graphNode.getId(), e.getMessage());
 				e.printStackTrace();
 				throw e;
 			}
 		}
-		result.getConnectors().addAll(generateExecutionConnectors(graphConnections,prefix));
+		result.getConnectors().addAll(generateExecutionConnectors(graphConnections));
 		result=rebuildConnectors(result);
 		return result;
 	}
 	
 
-	private static AbstractMainExecutor buildComponentExecutor(GraphNode graphNode, String prefix, GraphCompleteEnvironment environment) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private static AbstractMainExecutor buildComponentExecutor(GraphNode graphNode,  GraphCompleteEnvironment environment) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		String className = graphNode.getType().getClassName();
 		Class<?> clazz;
 		clazz = Class.forName(className);
 		AbstractMainExecutor executorElement =(AbstractMainExecutor) clazz.newInstance();
-		executorElement.setNodeId(prefix+ graphNode.getId().toString());
+		executorElement.setNodeId(graphNode.getId().toString());
 		executorElement.setGraphEnvironment(environment);
+		executorElement.setEnvironmentKey(graphNode.getEnvironmentKey());
+		executorElement.setNodeConfiguration(graphNode.getNodeConfiguration());
 		return executorElement;
 	}
 	
@@ -99,16 +99,15 @@ public class GraphExecutorModelManager {
 	/** 
 	 * Generate execution connectors with ids based on execution environment (taking into account prefixes for subflows element identifiers)
 	 * @param connectors
-	 * @param prefix
 	 * @return
 	 * 
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	private static List<GraphExecutionConnection> generateExecutionConnectors(List<GraphConnection> connectors, String prefix) {
+	private static List<GraphExecutionConnection> generateExecutionConnectors(List<GraphConnection> connectors) {
 		List<GraphExecutionConnection> result =new ArrayList<GraphExecutionConnection>();
 		for (GraphConnection connector:connectors) {
-			result.add(new GraphExecutionConnection(connector,prefix));
+			result.add(new GraphExecutionConnection(connector));
 		}
 		return result;
 	}

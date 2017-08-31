@@ -1,6 +1,8 @@
 
 package org.techstartingpoint.javagraphlib.model;
 
+import org.techstartingpoint.javagraphlib.model.json.NodeConfiguration;
+
 /**
  * Information about main element
  * This information is intended to be persisted and used in model frontend
@@ -19,18 +21,25 @@ public class GraphNode {
 	private int inputPorts;
 	private int outputPorts;
 	private boolean deleted;
+	String environmentKey;
+	NodeConfiguration nodeConfiguration;
+
 
 	private GraphNode() {}
 	
 	public GraphNode(String id,
-					   String name,
-					   GraphNodeType elementType) {
+					 String name,
+					 GraphNodeType elementType,
+					 String environmentKey,
+					 NodeConfiguration nodeConfiguration) {
 		this.id = id;
 	    this.name = name;
 		this.type = elementType;
 		this.inputPorts=elementType.getInputPorts();
 		this.outputPorts=elementType.getOutputPorts();
 		this.deleted=false;
+		this.environmentKey=environmentKey;
+		this.nodeConfiguration=nodeConfiguration;
 	}
 
 	
@@ -83,21 +92,34 @@ public class GraphNode {
 		this.deleted = deleted;
 	}
 
-	
-	
-	
+	public String getEnvironmentKey() {
+		return environmentKey;
+	}
 
+	public void setEnvironmentKey(String environmentKey) {
+		this.environmentKey = environmentKey;
+	}
 
+	public NodeConfiguration getNodeConfiguration() {
+		return nodeConfiguration;
+	}
 
-	@Override
-	public String toString() {
-		return "GraphNode [id=" + id + ", name=" + name
-				+ ", inputPorts=" + inputPorts
-				+ ", outputPorts=" + outputPorts + ", activity="
-				+ "]";
+	public void setNodeConfiguration(NodeConfiguration nodeConfiguration) {
+		this.nodeConfiguration = nodeConfiguration;
 	}
 
 
-	
-	
+    @Override
+    public String toString() {
+        return "GraphNode{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", inputPorts=" + inputPorts +
+                ", outputPorts=" + outputPorts +
+                ", deleted=" + deleted +
+                ", environmentKey='" + environmentKey + '\'' +
+                ", nodeConfiguration=" + nodeConfiguration +
+                '}';
+    }
 }

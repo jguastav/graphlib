@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.techstartingpoint.javagraphlib.GraphUtils;
+import org.techstartingpoint.javagraphlib.components.core.ExecutionPort;
 import org.techstartingpoint.javagraphlib.excomponents.ComponentRef;
 import org.techstartingpoint.javagraphlib.excomponents.ComponentSystem;
 import org.techstartingpoint.javagraphlib.components.core.AbstractMainExecutor;
@@ -85,7 +86,6 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	
 	/**
 	 * 
-	 * @param fluxEnvironment
 	 * @param workflowService
 	 * @param workflowFileName
 	 * @param graphRunnerEnvironment
@@ -133,17 +133,39 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 		}
 		// launch all initial executors
 		for (Entry<String, AbstractMainExecutor> executorEntry:executionModel.getExecutors().entrySet()) {
-			// TODO: change condition - verify all inputs are ready
-			if (hasNoPredecessors(executorEntry.getKey())) {
+			if (checkStartConditionByInputsFilled(executorEntry.getKey())) {
 				this.executionEnvironment.run(executorEntry.getValue());
 				executorEntry.getValue().start();
 			}
-			
 		}
+
 	}
-	
-	
-	/**
+
+
+
+
+
+	private boolean checkStartConditionByPredecessors(String executorKey) {
+	    return hasNoPredecessors(executorKey);
+    }
+
+    private boolean checkStartConditionByInputsFilled(String executorKey) {
+        return allInputsAreFilled(executorKey);
+    }
+
+    private boolean allInputsAreFilled(String executorKey) {
+        AbstractMainExecutor executor=executionModel.getExecutors().get(executorKey);
+        boolean allInputsAreFilled=true;
+
+        if (executor.getInputs().size()>0) {
+            for (ExecutionPort port:executor.getInputs()) {
+                allInputsAreFilled=allInputsAreFilled && port.isSetted();
+            }
+        }
+        return allInputsAreFilled;
+    }
+
+    /**
 	 * Method to know if an element has no predecessors in the current execution Model
 	 * The goal is to identify those nodes that does not need any previous node to start
 	 * It was used initially to know if an element can be started at beggining
@@ -178,7 +200,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 			this.environment.setStatus(GraphCompleteEnvironment.RUNNING_STATUS);
 			this.executionModel=
 					GraphExecutorModelManager.generateExecutionModel(
-							new GraphExecutionModel(),"",this.workflow.getNodeList(),this.workflow.getConnectorList(),this.environment);
+							new GraphExecutionModel(),this.workflow.getNodeList(),this.workflow.getConnectorList(),this.environment);
 			System.out.println("ExecutionModel:"+this.executionModel);
 			runExecutors(this.executionModel);
 		} catch (Exception e) {

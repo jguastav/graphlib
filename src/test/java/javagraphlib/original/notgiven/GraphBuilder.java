@@ -1,6 +1,7 @@
 package javagraphlib.original.notgiven;
 
 import javagraphlib.original.DirectedGraph;
+import javagraphlib.original.Node;
 
 import java.util.Map;
 

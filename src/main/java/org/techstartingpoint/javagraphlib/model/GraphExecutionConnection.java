@@ -17,12 +17,11 @@ public class GraphExecutionConnection extends GraphConnection {
 	/**
 	 * Generates a new connector element pointing to the index assigned in the running environment
 	 * @param graphConnection
-	 * @param prefix
 	 */
-	public GraphExecutionConnection(GraphConnection graphConnection, String prefix) {
+	public GraphExecutionConnection(GraphConnection graphConnection) {
 		super(graphConnection.getId(), graphConnection.getSourceElement(), graphConnection.getSourceIndex(), graphConnection.getTargetElement(), graphConnection.getTargetIndex());
-		this.setSourceExecutionId(prefix+ graphConnection.getSourceElement().getId().toString());
-		this.setTargetExecutionId(prefix+ graphConnection.getTargetElement().getId().toString());
+		this.setSourceExecutionId(graphConnection.getSourceElement().getId().toString());
+		this.setTargetExecutionId(graphConnection.getTargetElement().getId().toString());
 	};
 
 	public String getSourceExecutionId() {

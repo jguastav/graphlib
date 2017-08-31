@@ -1,9 +1,8 @@
 package org.techstartingpoint.javagraphlib.components.lib;
 
-import org.techstartingpoint.javagraphlib.components.core.AbstractMainBaseComponent;
 import org.techstartingpoint.javagraphlib.components.core.AbstractMainExecutor;
 
-public class ReadFile extends AbstractMainExecutor {
+public class SQLExecutor extends AbstractMainExecutor {
     /**
      * @param name
      * @param componentClassName
@@ -12,22 +11,21 @@ public class ReadFile extends AbstractMainExecutor {
      * @param outputPorts
      * @author Jose Alberto Guastavino
      */
-    public ReadFile(String name, String componentClassName, String className, int inputPorts, int outputPorts) {
+    public SQLExecutor(String name, String componentClassName, String className, int inputPorts, int outputPorts) {
         super(name, componentClassName, className, inputPorts, outputPorts);
     }
 
-    public ReadFile() {
-        super("ReadFile",
-                "org.techstartingpoint.javagraphlib.components.lib.Filter",
-                "org.techstartingpoint.javagraphlib.components.lib.Filter",
-                0,
+    public SQLExecutor() {
+        super("SQLExecutor",
+                "org.techstartingpoint.javagraphlib.components.lib.SQLExecutor",
+                "org.techstartingpoint.javagraphlib.components.lib.SQLExecutor",
+                1,
                 1);
     }
 
-
     @Override
     protected void runCore(Object message) throws Exception {
-        System.out.println("ReadFile");
+        System.out.println("SQLExecutor");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());
         System.out.println("input:"+this.getInputPorts());
