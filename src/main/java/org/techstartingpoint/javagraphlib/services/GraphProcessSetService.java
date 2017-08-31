@@ -34,7 +34,7 @@ import org.techstartingpoint.javagraphlib.model.workflow.Workflow;
 public class GraphProcessSetService {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private static final String BASE_PACKAGE="org.techstartingpoint.javagraphlib.components.lib.";
+    private static final String BASE_PACKAGE="org.techstartingpoint.javagraphlib.components.";
 
     /**
      * Get Activity by a given name in a given job
