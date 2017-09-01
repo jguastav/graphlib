@@ -60,10 +60,7 @@ public class GraphProcessSetService {
     private GraphProcess convert(String name,Workflow jsonWorkflow) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, URISyntaxException, MalformedURLException, ClassNotFoundException {
         // Map to store and search nodes
         Map<String,GraphNode> nodeMap=new HashMap<String,GraphNode>();
-
-
         GraphProcess graphProcess=new GraphProcess(jsonWorkflow.getId(),name);
-        List<GraphConnection> connections=graphProcess.getConnectorList();
         for (Node node:jsonWorkflow.getNodes()) {
             String implementationName=BASE_PACKAGE+node.getComponent_info().getName();
             GraphNodeType nodeType=new GraphNodeType(implementationName,node.getEnvironment_key(),node.getConf());
@@ -84,10 +81,12 @@ public class GraphProcessSetService {
                                     idConnector,
                                     sourceNode,connection.getFrom().getPort_index(),
                                     targetNode,connection.getTo().getPort_index());
+                    graphProcess.getConnectorList().add(graphConnection);
                 }
             }
             idConnector++;
         }
+        System.out.println(graphProcess.toString());
         return graphProcess;
     }
 

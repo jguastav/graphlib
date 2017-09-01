@@ -193,8 +193,11 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 			this.environment.setStatus(GraphCompleteEnvironment.RUNNING_STATUS);
 			this.executionModel=
 					GraphExecutorModelManager.generateExecutionModel(
-							new GraphExecutionModel(),this.workflow.getNodeList(),this.workflow.getConnectorList(),this.environment);
-			System.out.println("ExecutionModel:"+this.executionModel);
+							new GraphExecutionModel(),
+                            this.workflow.getNodeList(),
+                            this.workflow.getConnectorList(),
+                            this.environment);
+			System.out.println("ExecutionModel:\n\t"+this.executionModel);
 			runExecutors(this.executionModel);
 		} catch (Exception e) {
 			this.environment.showMessage(
