@@ -1,8 +1,7 @@
 
 package org.techstartingpoint.javagraphlib.execution;
 
-import org.techstartingpoint.javagraphlib.api.AbstractMainExecutor;
-import org.techstartingpoint.javagraphlib.execution.GraphExecutionConnection;
+import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 import org.techstartingpoint.javagraphlib.graph.GraphConnection;
 
 import java.util.ArrayList;
@@ -24,16 +23,7 @@ import java.util.Map;
 public class GraphExecutionModel {
 	Map<String,AbstractMainExecutor> executors=new HashMap<String,AbstractMainExecutor>();
 	List<GraphConnection> connectors= new ArrayList<GraphConnection>();
-	/**
-	 * ids containing entry nodes for subfluxes
-	 */
-	Map<String,String> initialNodes=new HashMap<String,String>();
-	/**
-	 * ids containing entry nodes for subfluxes
-	 */
-	Map<String,String> finalNodes=new HashMap<String,String>();
-	
-	
+
 	
 	/**
 	 * Components of the activity
@@ -41,34 +31,27 @@ public class GraphExecutionModel {
 	public Map<String, AbstractMainExecutor> getExecutors() {
 		return executors;
 	}
-	public void setExecutors(Map<String, AbstractMainExecutor> executors) {
-		this.executors = executors;
-	}
 	public List<GraphConnection> getConnectors() {
 		return connectors;
 	}
-	public void setConnectors(List<GraphConnection> connectors) {
-		this.connectors = connectors;
-	}
-	public Map<String, String> getInitialNodes() {
-		return initialNodes;
-	}
-	public void setInitialNodes(Map<String, String> initialNodes) {
-		this.initialNodes = initialNodes;
-	}
-	public Map<String, String> getFinalNodes() {
-		return finalNodes;
-	}
-	public void setFinalNodes(Map<String, String> finalNodes) {
-		this.finalNodes = finalNodes;
-	}
-
 
 	@Override
 	public String toString() {
 		return String.format("GraphExecutionModel [\n\texecutors=%s, \n\tconnectors=%s]", executors, connectors);
 	}
 
-	
 
+    /**
+     * Get the list of not finished nodes yet during execution
+     * @return
+     */
+    public List<AbstractMainExecutor> getPendingNodes() {
+		List<AbstractMainExecutor> executorList=new ArrayList<AbstractMainExecutor>();
+		for (Map.Entry<String, AbstractMainExecutor> executorEntry:getExecutors().entrySet()) {
+			if (!executorEntry.getValue().isFinished()) {
+				executorList.add(executorEntry.getValue());
+			}
+		}
+		return executorList;
+    }
 }

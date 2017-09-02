@@ -1,6 +1,6 @@
 package org.techstartingpoint.javagraphlib.components;
 
-import org.techstartingpoint.javagraphlib.api.AbstractMainExecutor;
+import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
 public class Filter extends AbstractMainExecutor {
     /**

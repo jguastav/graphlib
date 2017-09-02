@@ -16,15 +16,14 @@ package org.techstartingpoint.javagraphlib.graph;
 public class GraphConnection {
 	
 	private Long id;
-	private GraphNode sourceElement;
+	private AbstractMainExecutor sourceElement;
 	private int sourceIndex;
-	private GraphNode targetElement;
+	private AbstractMainExecutor targetElement;
 	private int targetIndex;
 	private String sourceId;
 	private String targetId;
 
-	private GraphConnection() {}
-	
+
 	/**
 	 * Constructor for not async connectors
 	 * @param id
@@ -36,7 +35,7 @@ public class GraphConnection {
 	 * @author Jose Alberto Guastavino
 	 *
 	 */
-	public GraphConnection(Long id, GraphNode sourceElement, int sourceIndex, GraphNode targetElement, int targetIndex) {
+	public GraphConnection(Long id, AbstractMainExecutor sourceElement, int sourceIndex, AbstractMainExecutor targetElement, int targetIndex) {
 		this.id=id;
 		this.targetIndex=targetIndex;
 		this.sourceIndex=sourceIndex;
@@ -44,10 +43,6 @@ public class GraphConnection {
 		this.setTargetElement(targetElement);
 	}
 
-
-	public Long getId() {
-		return id;
-	}
 
 	public void setId(Long id) {
 		this.id = id;
@@ -69,25 +64,25 @@ public class GraphConnection {
 		this.targetIndex = targetIndex;
 	}
 
-	public GraphNode getSourceElement() {
+	public AbstractMainExecutor getSourceElement() {
 		return sourceElement;
 	}
 
-	public void setSourceElement(GraphNode sourceElement) {
+	public void setSourceElement(AbstractMainExecutor sourceElement) {
 		this.sourceElement = sourceElement;
 		if (sourceElement!=null) {
-			this.setSourceId(sourceElement.getId());
+			this.setSourceId(sourceElement.getNodeId());
 		}
 	}
 
-	public GraphNode getTargetElement() {
+	public AbstractMainExecutor getTargetElement() {
 		return targetElement;
 	}
 
-	public void setTargetElement(GraphNode targetElement) {
+	public void setTargetElement(AbstractMainExecutor targetElement) {
 		this.targetElement = targetElement;
 		if (targetElement!=null) {
-			this.setTargetId(targetElement.getId());
+			this.setTargetId(targetElement.getNodeId());
 		}
 	}
 

@@ -8,5 +8,5 @@ package org.techstartingpoint.javagraphlib.execution;
  *
  */
 public interface GraphRunnerLauncher {
-	public void run() throws Throwable;
+	void run() throws Throwable;
 }

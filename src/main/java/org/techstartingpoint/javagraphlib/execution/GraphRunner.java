@@ -20,7 +20,7 @@ public interface GraphRunner {
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	public void broadcast(String fluxId, int outputIndex, Object value) throws Exception;
+	void broadcast(String fluxId, int outputIndex, Object value) throws Exception;
 
 
 

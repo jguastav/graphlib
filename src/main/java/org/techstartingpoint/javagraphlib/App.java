@@ -3,9 +3,6 @@ package org.techstartingpoint.javagraphlib;
 
 import org.techstartingpoint.javagraphlib.execution.GraphRunnerEnvironmentImpl;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
 
 /**
  * Application to load and add a flow based on a workflow files referencing to existing classes components
@@ -21,12 +18,21 @@ public class App {
 
         // String jsonFileName=args[0];
         // String workflowFileName=jsonFileName;
-        // TODO: quit line to get argument
-        String workflowFileName="workflow.json";
-        workflowFileName="workflow2WithStart.json";
-
         runnerEnvironment=new GraphRunnerEnvironmentImpl();
+
+        String workflowFileName="workflow.json";
+        System.out.println("running "+workflowFileName);
         runnerEnvironment.run(workflowFileName);
+
+        workflowFileName="workflow2WithStart.json";
+        System.out.println("running "+workflowFileName);
+        runnerEnvironment.run(workflowFileName);
+
+       //  workflowFileName="workflow2WithStartConnectingWriteAndJoin.json";
+        workflowFileName="workflow2WithStartConnectingWriteAndJoin.json";
+        System.out.println("running "+workflowFileName);
+        runnerEnvironment.run(workflowFileName);
+
 
     }
 

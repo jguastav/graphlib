@@ -9,12 +9,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.techstartingpoint.javagraphlib.commons.GraphUtils;
-import org.techstartingpoint.javagraphlib.api.ExecutionPort;
-import org.techstartingpoint.javagraphlib.excomponents.ComponentSystem;
-import org.techstartingpoint.javagraphlib.api.AbstractMainExecutor;
+import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 import org.techstartingpoint.javagraphlib.graph.GraphConnection;
-import org.techstartingpoint.javagraphlib.services.GraphProcessSetService;
+import org.techstartingpoint.javagraphlib.api.GraphAPIService;
 
 
 /**
@@ -38,12 +35,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 
 
 	
-	/**
-	 * Shared context of all executions
-	 * 
-	 */
-	private GraphCompleteEnvironment environment;
-	
+
 	/**
 	 * Current running workflow
 	 */
@@ -53,18 +45,13 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
      */
 	private GraphExecutionModel executionModel;
 
-	/**
-	 * Element that takes into account running processes in order to know if an workflow is finished
-	 */
-	private ExecutionState executionState;
-	
-	/**
+    /**
 	 * Main framework of execution where all running activities are launched
 	 * In this class Is used to force stop
 	 */
 	GraphRunnerEnvironmentImpl caller;
 
-	
+
 	/**
 	 * Akka component System
 	 */
@@ -74,9 +61,9 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 
 	
 	public GraphRunnerImpl() {
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @param workflowService
@@ -85,19 +72,16 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	public GraphRunnerImpl(GraphCompleteEnvironment graphEnvironment,
-						   GraphProcessSetService workflowService,
+	public GraphRunnerImpl(GraphAPIService workflowService,
 						   String workflowFileName,
 						   GraphRunnerEnvironmentImpl graphRunnerEnvironment) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		this.executionModel =workflowService.getExecutionModel(workflowFileName,graphEnvironment);
+		this.executionModel =workflowService.getExecutionModel(workflowFileName);
 		// retrieve workflow
 
 
-        this.environment=graphEnvironment;
 		//CheckCycle checkCycle=new CheckCycle();
 		//this.isCyclic=checkCycle.checkCycle(this.workflow.getNodeList(), this.workflow.getConnectorList());
 		// this.environment.sendMessage(-1L, "jobName:"+jobName+" workflow:"+activityName+" cyclic:"+this.isCyclic);
-		this.executionState =new ExecutionState();
 		this.caller=graphRunnerEnvironment;
 	}
 	
@@ -115,13 +99,12 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 */
 	private void runExecutors(GraphExecutionModel executionModel) throws Throwable {
 		// main cycle
-		GraphExtensionImpl springExtension=new GraphExtensionImpl();
 		this.componentSystem = ComponentSystem.create();
 		// start all executors
 		// makes all executors begin to listen to messages
 		int idInstanceIndex=1;
 		for (Entry<String, AbstractMainExecutor> executorEntry:executionModel.getExecutors().entrySet()) {
-			executorEntry.getValue().instantiate(componentSystem, springExtension,String.valueOf(idInstanceIndex++),this);
+			executorEntry.getValue().instantiate(componentSystem, String.valueOf(idInstanceIndex++),this);
 		}
 		// launch all executors that can be started
         boolean executorsThatCanBeStarted=true;
@@ -134,56 +117,17 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
                 }
             }
         }
-
-	}
-
-
-
-
-
-	private boolean checkStartConditionByPredecessors(String executorKey) {
-	    return hasNoPredecessors(executorKey);
-    }
-
-    private boolean checkStartConditionByInputsFilled(String executorKey) {
-        return allInputsAreFilled(executorKey);
-    }
-
-    private boolean allInputsAreFilled(String executorKey) {
-        AbstractMainExecutor executor=executionModel.getExecutors().get(executorKey);
-        boolean allInputsAreFilled=true;
-
-        if (executor.getInputs().size()>0) {
-            for (ExecutionPort port:executor.getInputs()) {
-                allInputsAreFilled=allInputsAreFilled && port.isSetted();
-            }
+        List<AbstractMainExecutor> pendingExecutors=executionModel.getPendingNodes();
+        System.out.println("PendingNodes");
+        for (AbstractMainExecutor executor:pendingExecutors) {
+            System.out.println(executor);
         }
-        return allInputsAreFilled;
-    }
 
-    /**
-	 * Method to know if an element has no predecessors in the current execution Model
-	 * The goal is to identify those nodes that does not need any previous node to start
-	 * It was used initially to know if an element can be started at beggining
-	 * It should be deprecated
-	 * @param executorKey
-	 * @return
-	 * 
-	 * @author Jose Alberto Guastavino
-	 * 
-	 */
-	private boolean hasNoPredecessors(String executorKey) {
-		List<GraphConnection> connectors=this.executionModel.getConnectors();
-		boolean result=true;
-		boolean found=false;
-		for (int i=0;i<connectors.size() && !found;i++) {
-			found=connectors.get(i).getTargetId().equals(executorKey);
-		}
-		result=!found;
-		return result;
+
 	}
 
-	
+
+
 	/**
 	 * Main add exectuion method
 	 * Instantiates and runs the first excomponents
@@ -193,24 +137,20 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 */
 	public void run() throws Throwable {
 		try {
-			this.environment.setStatus(GraphCompleteEnvironment.RUNNING_STATUS);
 			System.out.println("ExecutionModel:\n\t"+this.executionModel);
 			runExecutors(this.executionModel);
 		} catch (Exception e) {
-			this.environment.showMessage(
-					"0", 
+			System.out.println(
+					"0:"+
 					"GraphRunner.add(): Finish add with errors:"+
 							this.executionModel ==null?
 									"null":
 									" exception "+e.getMessage()+" "+
 									e.getCause()!=null?e.getCause().toString():"");
 			if (e.getCause()!=null) {
-				this.environment.getOutput().sendMessage("0",e.getCause().toString());
+                System.out.println("0:"+e.getCause().toString());
 			}
 			// this.caller.stop(this.job.getName(),this.workflow.getName());
-		} finally {
-			this.environment.setStatus(GraphCompleteEnvironment.INACTIVE_STATUS);
-			
 		}
 	}
 
@@ -238,31 +178,6 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	}
 
 	
-	/**
-	 * Stop current workflow
-	 * This method kill all excomponents and componentSystem of current workflow
-	 * 
-	 * 
-	 * @author Jose Alberto Guastavino
-	 * 
-	 */
-	public void stop() {
-		try {
-			for (Entry<String,AbstractMainExecutor> executorEntry:this.executionModel.getExecutors().entrySet()) {
-				AbstractMainExecutor executor=executorEntry.getValue();
-				this.componentSystem.stop(executor);
-			}
-			this.componentSystem.terminate(); // TODO: Its a future- confirma termination
-		} catch (Exception e) {
-			this.environment.showMessage("0", "GraphRunner.add(): Finish add with errors:"+this.executionModel ==null?"null":" exception "+e.getMessage());
-			if (e.getCause()!=null) {
-				this.environment.showMessage("0", "GraphRunner.add(): Finish add with errors:"+" exception "+e.getCause().toString());
-			}
-		} finally {
-			this.environment.setStatus(GraphCompleteEnvironment.INACTIVE_STATUS);
-			
-		}
-	}
 
 	
 
