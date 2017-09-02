@@ -23,6 +23,8 @@ public class WriteFile extends AbstractMainExecutor {
         System.out.println(this.getNodeConfiguration());
         System.out.println("input:"+this.getInputPorts());
         System.out.println("output:"+this.getOutputPorts());
+        System.out.println("input(0)="+this.getInputValue(0));
+
     }
 
     public WriteFile() {

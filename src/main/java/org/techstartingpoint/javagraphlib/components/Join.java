@@ -31,6 +31,9 @@ public class Join extends AbstractMainExecutor {
         System.out.println(this.getNodeConfiguration());
         System.out.println("input:"+this.getInputPorts());
         System.out.println("output:"+this.getOutputPorts());
+        System.out.println("input(0)="+this.getInputValue(0));
+        System.out.println("input(1)="+this.getInputValue(1));
+        this.setOutputValue(0,"join:"+this.getInputValue(0)+" - "+this.getInputValue(1));
     }
 
 

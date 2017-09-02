@@ -172,6 +172,7 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
         runPost();
         // call to emtpy outputs to set those outputs that were not setted by the component during execution
         this.emptyOutputs();
+        System.out.println("-------------------------------------------------------------------------");
         this.finished=true;
     }
 
