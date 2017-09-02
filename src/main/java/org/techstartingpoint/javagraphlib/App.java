@@ -8,14 +8,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 
 /**
- * Application to load and run a flow based on a workflow files referencing to existing classes components
+ * Application to load and add a flow based on a workflow files referencing to existing classes components
  */
 public class App {
 
 
     static GraphRunnerEnvironmentImpl runnerEnvironment;
 
-    public static void main(String[] args) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static void main(String[] args) throws Throwable {
 
         System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
 
@@ -23,6 +23,8 @@ public class App {
         // String workflowFileName=jsonFileName;
         // TODO: quit line to get argument
         String workflowFileName="workflow.json";
+        workflowFileName="workflow2WithStart.json";
+
         runnerEnvironment=new GraphRunnerEnvironmentImpl();
         runnerEnvironment.run(workflowFileName);
 

@@ -62,7 +62,7 @@
       },
       "environment_key": "abc-def",
       "conf" : {
-        "joinTableSepcs": [
+        "joinTableSpecs": [
           {"join_dataset" : "project_filter" , "join_fields" : {}, "join_type" : "inner" }
         ]
       }

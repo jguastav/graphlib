@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class ComponentSystem {
 
-    String name;
     Map<String,AbstractMainExecutor> components;
 
     public AbstractMainExecutor register(String componentInstanceName,AbstractMainExecutor executor) {
@@ -15,13 +14,12 @@ public class ComponentSystem {
         return executor;
     }
 
-    private ComponentSystem(String name) {
-        this.name=name;
+    private ComponentSystem() {
         this.components=new HashMap<String,AbstractMainExecutor>();
     }
 
-    public static ComponentSystem create(String name) {
-        ComponentSystem result=new ComponentSystem(name);
+    public static ComponentSystem create() {
+        ComponentSystem result=new ComponentSystem();
         return result;
     }
 
@@ -29,5 +27,13 @@ public class ComponentSystem {
     }
 
     public void terminate() {
+    }
+
+    public Map<String, AbstractMainExecutor> getComponents() {
+        return components;
+    }
+
+    public void setComponents(Map<String, AbstractMainExecutor> components) {
+        this.components = components;
     }
 }

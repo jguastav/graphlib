@@ -6,7 +6,7 @@ import org.techstartingpoint.javagraphlib.execution.GraphRunner;
 
 /**
  * Base class to be extended to build component
- * The main method component sould implement is runCore(....)
+ * The main method component sould implement is runMain(....)
  * 
  * @author Jose Alberto Guastavino
  *

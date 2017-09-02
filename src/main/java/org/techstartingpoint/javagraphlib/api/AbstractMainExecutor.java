@@ -7,6 +7,7 @@ import org.techstartingpoint.javagraphlib.execution.GraphRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -23,15 +24,9 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 	private List<ExecutionPort> outputs;
 	private boolean finished=false;
 
-
-
-
 	/**
 	 * akka component for akka implementation
 	 */
-	
-
-
 	
 	/**
 	 * component name in akka context
@@ -55,8 +50,7 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 	
 	// Global Elements
 	private GraphEnvironment graphEnvironment;
-	
-	
+
 	/**
 	 * 
 	 * @param name
@@ -101,6 +95,7 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 		System.out.println("AbstractMainExecutor.instantiate()"+this.componentInstanceName);
 		System.out.println(this.getName()+":"+this.getNodeId());
 		this.componentSystem.register(this.componentInstanceName,this);
+		this.runner=graphRunner;
 	}
 
 /*
@@ -112,12 +107,32 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
             this.componentInstanceName);
 */
 
-    public void start() throws Exception {
-		send(new Object(),null);
-	}
 
 	private class DummyMessage {};
-	
+
+
+    public Object getOutputValue(int index) throws Exception {
+        return this.getOutputs().get(index).getValue();
+    }
+
+
+    public Object getInputValue(int index) throws Exception {
+        return this.getInputs().get(index).getValue();
+    }
+
+
+    public void setInputValue(int index,Object value) throws Exception {
+        this.getInputs().get(index).setValue(value);
+        this.getInputs().get(index).setSetted(true);
+    }
+
+
+    protected void setOutputValue(int index,Object value) throws Exception {
+	    this.getOutputs().get(index).setValue(value);
+	    this.getOutputs().get(index).setSetted(true);
+	    this.runner.broadcast(this.getNodeId(),index,value);
+    }
+
 	public void send(Object message, AbstractMainExecutor sender) throws Exception {
 		Object messageToSend=message;
 		if (messageToSend==null) {
@@ -127,7 +142,7 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 		try {
 			System.out.println("AbstractMainExecutor.send()"+this.getNodeId());
 			System.out.println("AbstractMainExecutor.send(sender)");
-            this.tell(messageToSend, sender);
+//             this.tell(messageToSend, sender);
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.graphEnvironment.getOutput().sendMessage(this.getNodeId(), e.getMessage());
@@ -137,24 +152,11 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 		}
 	}
 
-    private void tell(Object messageToSend, AbstractMainExecutor sender) {
-	    // TODO: Call method onReceive
-
-
-
-
-
-
-
-    }
-
-
-
 
     // CORE EXECUTION
-
-
     private GraphRunner runner;
+
+
 
 
 
@@ -164,15 +166,30 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
      * @author Jose Alberto Guastavino
      *
      */
-    public void onReceive(Object message) throws Throwable {
-        if (this.runner!=null) {
-            this.runner.broadcast(this.nodeId, -1, message);
-        }
-        Long startedTime=System.currentTimeMillis();
-        runCore(message);
-        Long endTime=System.currentTimeMillis();
-        Long duration=endTime-startedTime;
+    public void run() throws Throwable {
+        runPre();
+        runMain();
+        runPost();
+        // call to emtpy outputs to set those outputs that were not setted by the component during execution
+        this.emptyOutputs();
+        this.finished=true;
     }
+
+
+    private void emptyOutputs() throws Exception {
+        for (int i=0;i<this.getOutputPorts();i++) {
+            if (!this.getOutputs().get(i).isSetted()) {
+                this.setOutputValue(i,null);
+            }
+        }
+    }
+
+
+    // To be implemented by component if needed to run before main run
+    public void runPre() { }
+
+    // To be implemented by component if needed to run before main run
+    public void runPost() { }
 
 
     /**
@@ -184,13 +201,12 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
      *  getEnvironment()... : to use shared resources of the execution runnning environment
      *  getProperties() : to access customized data of the element setted in each instance
      *
-     * @param message
      * @throws Exception
      *
      * @author Jose Alberto Guastavino
      *
      */
-    protected abstract void runCore(Object message) throws Exception;
+    protected abstract void runMain() throws Exception;
 
 
     // END CORE EXECUTION
@@ -250,12 +266,17 @@ public abstract class AbstractMainExecutor extends AbstractMainBaseComponent {
 
 
 	public boolean isReadyToStart() {
+
 		boolean result=true;
-		for (int i=0;i<this.getInputPorts();i++) {
-			if (this.inputs.get(i)==null) {
-				result=false;
-			}
-		}
+		if (finished) {
+            result=false;
+        } else {
+            for (int i=0;i<this.getInputPorts();i++) {
+                if (!this.inputs.get(i).isSetted()) {
+                    result=false;
+                }
+            }
+        }
 		return result;
 	}
 

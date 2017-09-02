@@ -5,7 +5,18 @@
     "api_version": "1.0.0"
   },
   "nodes": [{
-      "id": "742743c3",
+    "id": "dummystart",
+    "component_info": {
+      "id": "dummystart",
+      "name": "Start",
+      "version": "1.0"
+    },
+    "environment_key": "abc-def",
+    "conf" : {
+    }
+
+  },
+    {"id": "742743c3",
       "component_info": {
         "id": "r48dd54c",
         "name": "ReadFile",
@@ -81,7 +92,18 @@
     }
 
   ],
-  "connections": [{
+  "connections": [
+    {
+      "from": {
+        "node_id": "dummystart",
+        "port_index": 0
+      },
+      "to": {
+        "node_id": "742743c3",
+        "port_index": 0
+      }
+    },
+    {
     "from": {
       "node_id": "742743c3",
       "port_index": 0

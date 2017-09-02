@@ -40,7 +40,7 @@ public class GraphWalk {
         Component component = getComponent(start);
         component.getInPorts();
 
-        //ExecutionResult output = callable.run(start);
+        //ExecutionResult output = callable.add(start);
         System.out.println(component.getClass().getName());
 
         // Run other nodes from start node
@@ -55,7 +55,7 @@ public class GraphWalk {
                     visited.add(node);
                     queue.add(node);
                     component = getComponent(node);
-                    //ExecutionResult output = callable.run(node);
+                    //ExecutionResult output = callable.add(node);
                     System.out.println(component.getClass().getName());
                 }
             }

@@ -21,7 +21,7 @@ public abstract class AbstractMainBaseComponent {
 	 * 	Number of input interfaces (Includes data and no data interfaces)
 	 * Input interfaces are represented as connectors that can receive data (or signal) from another element. 
 	 * “no data” interfaces refers to a precedence relation.
-	 * There are no difference between data or no data connectors. The real difference depends on the implementation. Usually “no data” input means that in the implementation of runCore in the component the task can be executed with no importance of the message that has received.
+	 * There are no difference between data or no data connectors. The real difference depends on the implementation. Usually “no data” input means that in the implementation of runMain in the component the task can be executed with no importance of the message that has received.
 	 * In case the implementation doesn’t take data from the received message can be said that the element can be launched by SIGNAL.
 	 * In this version …. inputPorts should be always 1
 	 * 

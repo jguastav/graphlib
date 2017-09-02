@@ -24,12 +24,14 @@ public class Filter extends AbstractMainExecutor {
     }
 
     @Override
-    protected void runCore(Object message) throws Exception {
+    protected void runMain() throws Exception {
         System.out.println("Filter");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());
+        // DO SOMETHING
         System.out.println("input:"+this.getInputPorts());
         System.out.println("output:"+this.getOutputPorts());
+        this.setOutputValue(0,"Filter Value");
     }
 
 

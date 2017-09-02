@@ -13,6 +13,7 @@ import org.techstartingpoint.javagraphlib.commons.GraphUtils;
 import org.techstartingpoint.javagraphlib.api.ExecutionPort;
 import org.techstartingpoint.javagraphlib.excomponents.ComponentSystem;
 import org.techstartingpoint.javagraphlib.api.AbstractMainExecutor;
+import org.techstartingpoint.javagraphlib.graph.GraphConnection;
 import org.techstartingpoint.javagraphlib.services.GraphProcessSetService;
 
 
@@ -21,7 +22,7 @@ import org.techstartingpoint.javagraphlib.services.GraphProcessSetService;
  * Main executor of single activities
  * It should be created an instance of this class for each running workflow
  * It creates an AkkaComponentSystem and runs those elements that has no predecessors
- * When the elements finish send it output to the target excomponents via broadcast methods
+ * When the elements remove send it output to the target excomponents via broadcast methods
  * Async connections are like dummy messages sent initially by the excomponents
  * 
  * @author Jose Alberto Guastavino
@@ -46,12 +47,16 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	/**
 	 * Current running workflow
 	 */
-	private GraphProcess workflow;
+    /**
+     * Data defition of the main flow arranged to be executed including a map of all nodes (included nodes present in subflows) and connectors
+     * Connectors are rearranged to deal with the amp of nodes
+     */
+	private GraphExecutionModel executionModel;
 
 	/**
 	 * Element that takes into account running processes in order to know if an workflow is finished
 	 */
-	private ExecutionEnvironment executionEnvironment;
+	private ExecutionState executionState;
 	
 	/**
 	 * Main framework of execution where all running activities are launched
@@ -66,12 +71,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	ComponentSystem componentSystem;
 
 	
-	/**
-	 * Data defition of the main flow arranged to be executed including a map of all nodes (included nodes present in subflows) and connectors
-	 * Connectors are rearranged to deal with the amp of nodes
-	 */
-	private GraphExecutionModel executionModel;
-	
+
 	
 	public GraphRunnerImpl() {
 		
@@ -89,7 +89,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 						   GraphProcessSetService workflowService,
 						   String workflowFileName,
 						   GraphRunnerEnvironmentImpl graphRunnerEnvironment) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		this.workflow =workflowService.getGraphProcess(workflowFileName);
+		this.executionModel =workflowService.getExecutionModel(workflowFileName,graphEnvironment);
 		// retrieve workflow
 
 
@@ -97,7 +97,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 		//CheckCycle checkCycle=new CheckCycle();
 		//this.isCyclic=checkCycle.checkCycle(this.workflow.getNodeList(), this.workflow.getConnectorList());
 		// this.environment.sendMessage(-1L, "jobName:"+jobName+" workflow:"+activityName+" cyclic:"+this.isCyclic);
-		this.executionEnvironment=new ExecutionEnvironment();
+		this.executionState =new ExecutionState();
 		this.caller=graphRunnerEnvironment;
 	}
 	
@@ -113,24 +113,27 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * @author Jose Alberto Guastavino
 	 * 
 	 */
-	private void runExecutors(GraphExecutionModel executionModel) throws Exception {
+	private void runExecutors(GraphExecutionModel executionModel) throws Throwable {
 		// main cycle
 		GraphExtensionImpl springExtension=new GraphExtensionImpl();
-		this.componentSystem = ComponentSystem.create(
-		        this.workflow.getName().replace(' ','_')+"_"+ GraphUtils.getNowId());
+		this.componentSystem = ComponentSystem.create();
 		// start all executors
 		// makes all executors begin to listen to messages
 		int idInstanceIndex=1;
 		for (Entry<String, AbstractMainExecutor> executorEntry:executionModel.getExecutors().entrySet()) {
 			executorEntry.getValue().instantiate(componentSystem, springExtension,String.valueOf(idInstanceIndex++),this);
 		}
-		// launch all initial executors
-		for (Entry<String, AbstractMainExecutor> executorEntry:executionModel.getExecutors().entrySet()) {
-			if (checkStartConditionByInputsFilled(executorEntry.getKey())) {
-				this.executionEnvironment.run(executorEntry.getValue());
-				executorEntry.getValue().start();
-			}
-		}
+		// launch all executors that can be started
+        boolean executorsThatCanBeStarted=true;
+        while (executorsThatCanBeStarted) {
+            executorsThatCanBeStarted=false;
+            for (Entry<String, AbstractMainExecutor> executorEntry:executionModel.getExecutors().entrySet()) {
+                if (executorEntry.getValue().isReadyToStart()) {
+                    executorsThatCanBeStarted=true;
+                    executorEntry.getValue().run();
+                }
+            }
+        }
 
 	}
 
@@ -170,11 +173,11 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * 
 	 */
 	private boolean hasNoPredecessors(String executorKey) {
-		List<GraphExecutionConnection> connectors=this.executionModel.getConnectors();
+		List<GraphConnection> connectors=this.executionModel.getConnectors();
 		boolean result=true;
 		boolean found=false;
 		for (int i=0;i<connectors.size() && !found;i++) {
-			found=connectors.get(i).getTargetExecutionId().equals(executorKey);
+			found=connectors.get(i).getTargetId().equals(executorKey);
 		}
 		result=!found;
 		return result;
@@ -182,30 +185,24 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 
 	
 	/**
-	 * Main run exectuion method
+	 * Main add exectuion method
 	 * Instantiates and runs the first excomponents
 	 * 
 	 * @author Jose Alberto Guastavino
 	 * 
 	 */
-	public void run() {
+	public void run() throws Throwable {
 		try {
 			this.environment.setStatus(GraphCompleteEnvironment.RUNNING_STATUS);
-			this.executionModel=
-					GraphExecutorModelManager.generateExecutionModel(
-							new GraphExecutionModel(),
-                            this.workflow.getNodeList(),
-                            this.workflow.getConnectorList(),
-                            this.environment);
 			System.out.println("ExecutionModel:\n\t"+this.executionModel);
 			runExecutors(this.executionModel);
 		} catch (Exception e) {
 			this.environment.showMessage(
 					"0", 
-					"GraphRunner.run(): Finish run with errors:"+
-							this.workflow ==null?
+					"GraphRunner.add(): Finish add with errors:"+
+							this.executionModel ==null?
 									"null":
-									this.workflow.getName()+" exception "+e.getMessage()+" "+
+									" exception "+e.getMessage()+" "+
 									e.getCause()!=null?e.getCause().toString():"");
 			if (e.getCause()!=null) {
 				this.environment.getOutput().sendMessage("0",e.getCause().toString());
@@ -220,21 +217,21 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	
 	/**
 	 * Method used by excomponents to send messages to each others
-	 * in runCore of excomponents should call setOutput that internally run this method... sending the message to all connected target elements
+	 * in runMain of excomponents should call setOutput that internally add this method... sending the message to all connected target elements
 	 * 
 	 * 
 	 * @author Jose Alberto Guastavino
 	 * 
 	 */
-	public void broadcast(String fluxId, int outputIndex, Object value) throws Exception {
-		List<GraphExecutionConnection> connectors=this.executionModel.getConnectors();
-		AbstractMainExecutor executor=this.executionModel.getExecutors().get(fluxId);
-		if (outputIndex>0 && executor.getOutputPorts()>0) {
-			for (GraphExecutionConnection thisConnector:connectors) {
-				if (thisConnector.getSourceExecutionId().equals(executor.getNodeId()) && thisConnector.getSourceIndex()==outputIndex) {
-					AbstractMainExecutor target=this.executionModel.getExecutors().get(thisConnector.getTargetExecutionId());
-					this.executionEnvironment.run(target);
-					target.send(value,executor);
+	public void broadcast(String nodeId, int outputIndex, Object value) throws Exception {
+		List<GraphConnection> connectors=this.executionModel.getConnectors();
+		AbstractMainExecutor executor=this.executionModel.getExecutors().get(nodeId);
+		if (outputIndex>=0 && outputIndex<executor.getOutputPorts()) {
+			for (GraphConnection thisConnector:connectors) {
+				if (thisConnector.getSourceId().equals(executor.getNodeId()) && thisConnector.getSourceIndex()==outputIndex) {
+					AbstractMainExecutor target=this.executionModel.getExecutors().get(thisConnector.getTargetId());
+					int targetIndex=thisConnector.getTargetIndex();
+					target.setInputValue(targetIndex,value);;
 				}
 			}
 		} 
@@ -257,9 +254,9 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 			}
 			this.componentSystem.terminate(); // TODO: Its a future- confirma termination
 		} catch (Exception e) {
-			this.environment.showMessage("0", "GraphRunner.run(): Finish run with errors:"+this.workflow ==null?"null":this.workflow.getName()+" exception "+e.getMessage());
+			this.environment.showMessage("0", "GraphRunner.add(): Finish add with errors:"+this.executionModel ==null?"null":" exception "+e.getMessage());
 			if (e.getCause()!=null) {
-				this.environment.showMessage("0", "GraphRunner.run(): Finish run with errors:"+" exception "+e.getCause().toString());
+				this.environment.showMessage("0", "GraphRunner.add(): Finish add with errors:"+" exception "+e.getCause().toString());
 			}
 		} finally {
 			this.environment.setStatus(GraphCompleteEnvironment.INACTIVE_STATUS);

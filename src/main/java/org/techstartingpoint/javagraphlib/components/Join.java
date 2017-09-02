@@ -18,14 +18,14 @@ public class Join extends AbstractMainExecutor {
 
     public Join() {
         super("Join",
-                "org.techstartingpoint.javagraphlib.components.Filter",
-                "org.techstartingpoint.javagraphlib.components.Filter",
+                "org.techstartingpoint.javagraphlib.components.Join",
+                "org.techstartingpoint.javagraphlib.components.Join",
                 2,
                 1);
     }
 
     @Override
-    protected void runCore(Object message) throws Exception {
+    protected void runMain() throws Exception {
         System.out.println("Join");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());

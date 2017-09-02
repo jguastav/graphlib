@@ -5,7 +5,7 @@ import java.util.List;
 public class NodeConfiguration {
     String dataset;
     String dataframe;
-    List<JoinTableSpecification> joinTableSepcs;
+    List<JoinTableSpecification> joinTableSpecs;
 
     public String getDataset() {
         return dataset;
@@ -24,11 +24,11 @@ public class NodeConfiguration {
     }
 
     public List<JoinTableSpecification> getJoinTableSepcs() {
-        return joinTableSepcs;
+        return joinTableSpecs;
     }
 
-    public void setJoinTableSepcs(List<JoinTableSpecification> joinTableSepcs) {
-        this.joinTableSepcs = joinTableSepcs;
+    public void setJoinTableSepcs(List<JoinTableSpecification> joinTableSpecs) {
+        this.joinTableSpecs = joinTableSpecs;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class NodeConfiguration {
         return "NodeConfiguration{" +
                 "dataset='" + dataset + '\'' +
                 ", dataframe='" + dataframe + '\'' +
-                ", joinTableSepcs=" + joinTableSepcs +
+                ", joinTableSpecs=" + joinTableSpecs +
                 '}';
     }
 }

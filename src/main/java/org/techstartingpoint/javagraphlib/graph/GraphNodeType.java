@@ -30,12 +30,7 @@ public class GraphNodeType {
 
 	
 
-	/**
-	 * Category name to group tools
-	 */
-	private String category;
-	
-	
+
 	// node implementation
 	private String className;
 	
@@ -117,14 +112,6 @@ public class GraphNodeType {
 
 
 
-	public String getCategory() {
-		return category;
-	}
-
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
 
 
 

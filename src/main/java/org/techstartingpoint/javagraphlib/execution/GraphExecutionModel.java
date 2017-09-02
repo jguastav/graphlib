@@ -3,6 +3,7 @@ package org.techstartingpoint.javagraphlib.execution;
 
 import org.techstartingpoint.javagraphlib.api.AbstractMainExecutor;
 import org.techstartingpoint.javagraphlib.execution.GraphExecutionConnection;
+import org.techstartingpoint.javagraphlib.graph.GraphConnection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 public class GraphExecutionModel {
 	Map<String,AbstractMainExecutor> executors=new HashMap<String,AbstractMainExecutor>();
-	List<GraphExecutionConnection> connectors= new ArrayList<GraphExecutionConnection>();
+	List<GraphConnection> connectors= new ArrayList<GraphConnection>();
 	/**
 	 * ids containing entry nodes for subfluxes
 	 */
@@ -43,10 +44,10 @@ public class GraphExecutionModel {
 	public void setExecutors(Map<String, AbstractMainExecutor> executors) {
 		this.executors = executors;
 	}
-	public List<GraphExecutionConnection> getConnectors() {
+	public List<GraphConnection> getConnectors() {
 		return connectors;
 	}
-	public void setConnectors(List<GraphExecutionConnection> connectors) {
+	public void setConnectors(List<GraphConnection> connectors) {
 		this.connectors = connectors;
 	}
 	public Map<String, String> getInitialNodes() {

@@ -33,7 +33,7 @@ public class GraphRunnerEnvironmentImpl {
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	public void run(String workflowFileName) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+	public void run(String workflowFileName) throws Throwable {
         environment=new GraphEnvironmentImpl();
 		GraphRunnerImpl runner=new GraphRunnerImpl(environment,new GraphProcessSetService(),workflowFileName,this);
 		runner.run();

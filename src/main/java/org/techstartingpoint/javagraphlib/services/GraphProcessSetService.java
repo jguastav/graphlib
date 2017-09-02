@@ -14,7 +14,9 @@ import java.util.Map;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.techstartingpoint.javagraphlib.execution.GraphProcess;
+import org.techstartingpoint.javagraphlib.api.AbstractMainExecutor;
+import org.techstartingpoint.javagraphlib.execution.GraphCompleteEnvironment;
+import org.techstartingpoint.javagraphlib.execution.GraphExecutionModel;
 import org.techstartingpoint.javagraphlib.graph.GraphConnection;
 import org.techstartingpoint.javagraphlib.graph.GraphNode;
 import org.techstartingpoint.javagraphlib.graph.GraphNodeType;
@@ -41,7 +43,7 @@ public class GraphProcessSetService {
      * @param workflowFileName
      * @return
      */
-    public GraphProcess getGraphProcess(String workflowFileName) throws IOException, URISyntaxException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public GraphExecutionModel getExecutionModel(String workflowFileName,GraphCompleteEnvironment environment) throws IOException, URISyntaxException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         // read workflow
         String jsonWorkflowString=readJson(workflowFileName);
@@ -52,20 +54,22 @@ public class GraphProcessSetService {
         log.debug(jsonWorkflow.toString());
 
         // generate graph process
-        GraphProcess result = convert(workflowFileName,jsonWorkflow);
+        GraphExecutionModel result = convert(workflowFileName,jsonWorkflow,environment);
 
     	return result;
     }
 
-    private GraphProcess convert(String name,Workflow jsonWorkflow) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, URISyntaxException, MalformedURLException, ClassNotFoundException {
+    private GraphExecutionModel convert(String name,Workflow jsonWorkflow,GraphCompleteEnvironment environment) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, URISyntaxException, MalformedURLException, ClassNotFoundException {
         // Map to store and search nodes
         Map<String,GraphNode> nodeMap=new HashMap<String,GraphNode>();
-        GraphProcess graphProcess=new GraphProcess(jsonWorkflow.getId(),name);
+        GraphExecutionModel graphExecutionModel=new GraphExecutionModel();
         for (Node node:jsonWorkflow.getNodes()) {
             String implementationName=BASE_PACKAGE+node.getComponent_info().getName();
             GraphNodeType nodeType=new GraphNodeType(implementationName,node.getEnvironment_key(),node.getConf());
             GraphNode graphNode = new GraphNode(node.getId(),implementationName,nodeType,node.getEnvironment_key(),node.getConf());
-            graphProcess.getNodeList().add(graphNode);
+            AbstractMainExecutor executorElement =buildComponentExecutor(graphNode,environment);
+            graphExecutionModel.getExecutors().put(executorElement.getNodeId().toString(),executorElement);
+            environment.showMessage(graphNode.getId(), "added class "+executorElement.getComponentClassName());
             nodeMap.put(node.getId(),graphNode);
         };
         long idConnector=0;
@@ -81,15 +85,26 @@ public class GraphProcessSetService {
                                     idConnector,
                                     sourceNode,connection.getFrom().getPort_index(),
                                     targetNode,connection.getTo().getPort_index());
-                    graphProcess.getConnectorList().add(graphConnection);
+                    graphExecutionModel.getConnectors().add(graphConnection);
                 }
             }
             idConnector++;
         }
-        System.out.println(graphProcess.toString());
-        return graphProcess;
+        System.out.println(graphExecutionModel.toString());
+        return graphExecutionModel;
     }
 
+    private static AbstractMainExecutor buildComponentExecutor(GraphNode graphNode,  GraphCompleteEnvironment environment) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        String className = graphNode.getType().getClassName();
+        Class<?> clazz;
+        clazz = Class.forName(className);
+        AbstractMainExecutor executorElement =(AbstractMainExecutor) clazz.newInstance();
+        executorElement.setNodeId(graphNode.getId().toString());
+        executorElement.setGraphEnvironment(environment);
+        executorElement.setEnvironmentKey(graphNode.getEnvironmentKey());
+        executorElement.setNodeConfiguration(graphNode.getNodeConfiguration());
+        return executorElement;
+    }
 
     /**
      * Generate plain Workflow object from workflow string

@@ -17,15 +17,15 @@ public class ReadFile extends AbstractMainExecutor {
 
     public ReadFile() {
         super("ReadFile",
-                "org.techstartingpoint.javagraphlib.components.Filter",
-                "org.techstartingpoint.javagraphlib.components.Filter",
-                0,
+                "org.techstartingpoint.javagraphlib.components.ReadFile",
+                "org.techstartingpoint.javagraphlib.components.ReadFile",
+                1,
                 1);
     }
 
 
     @Override
-    protected void runCore(Object message) throws Exception {
+    protected void runMain() throws Exception {
         System.out.println("ReadFile");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());

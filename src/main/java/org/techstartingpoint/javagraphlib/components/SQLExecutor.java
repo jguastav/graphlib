@@ -24,7 +24,7 @@ public class SQLExecutor extends AbstractMainExecutor {
     }
 
     @Override
-    protected void runCore(Object message) throws Exception {
+    protected void runMain() throws Exception {
         System.out.println("SQLExecutor");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());
