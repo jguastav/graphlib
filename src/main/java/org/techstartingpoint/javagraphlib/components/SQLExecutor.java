@@ -4,10 +4,12 @@ import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
 public class SQLExecutor extends AbstractMainExecutor {
 
-    public int getTotalInputPorts() {return 1;}
-    public int getTotalOutputPorts() {return 1;}
     public String getName() {return "SQLExecutor";}
 
+    private static Class[] inputClasses={String.class};
+    private static Class[] outputClasses={String.class};
+    public Class[] getInputClasses() {return inputClasses;}
+    public Class[] getOutputClasses() {return outputClasses;}
 
     @Override
     protected void runMain() throws Exception {

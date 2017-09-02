@@ -3,6 +3,8 @@ package org.techstartingpoint.javagraphlib.graph;
 import org.techstartingpoint.javagraphlib.execution.*;
 import org.techstartingpoint.javagraphlib.model.workflow.NodeConfiguration;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +48,12 @@ public abstract class AbstractMainExecutor  {
      *
      *
      */
-    abstract public int getTotalInputPorts();;
 
-    abstract public int getTotalOutputPorts();
+    public final int getTotalInputPorts() {return getInputClasses().length;}
+    public final int getTotalOutputPorts() {return getOutputClasses().length;}
 
-
+    abstract public Class[] getInputClasses();
+    abstract public Class[] getOutputClasses();
 
 
     /**
@@ -101,7 +104,34 @@ public abstract class AbstractMainExecutor  {
         this.nodeConfiguration = nodeConfiguration;
     }
 
-	
+
+    /*
+                try {
+            */
+                /*
+                Constructor c = g.getConstructor(portClass.getClass());
+                */
+    // ExecutorPort<?> newPort= (ExecutorPort<?>) c.newInstance(Integer.toString(i));
+    // inputs.add(newPort);
+    /*
+                inputs.add(new ExecutorPort<String>(Integer.toString(i)));
+                */
+                /*
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+                */
+                /*
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+                */
+
+
+
+
 	
 	/**
 	 * 
@@ -112,11 +142,11 @@ public abstract class AbstractMainExecutor  {
 	public AbstractMainExecutor() {
 		this.inputs=new ArrayList<ExecutorPort>(getTotalInputPorts());
 		for (int i = 0; i< getTotalInputPorts(); i++) {
-			inputs.add(new ExecutorPort<String>(Integer.toString(i)));
+                inputs.add(new ExecutorPort(this.getInputClasses()[i],Integer.toString(i)));
 		}
 		this.outputs=new ArrayList<ExecutorPort>(this.getTotalOutputPorts());
 		for (int i = 0; i< this.getTotalOutputPorts(); i++) {
-            outputs.add(new ExecutorPort<String>(Integer.toString(i)));
+            outputs.add(new ExecutorPort(this.getOutputClasses()[i],Integer.toString(i)));
 		}
 		this.finished=false;
 	}

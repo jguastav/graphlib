@@ -3,15 +3,13 @@ package org.techstartingpoint.javagraphlib.components;
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
 public class Filter extends AbstractMainExecutor {
+
+    private static Class[] inputClasses={String.class};
+    private static Class[] outputClasses={String.class};
+    public Class[] getInputClasses() {return inputClasses;}
+    public Class[] getOutputClasses() {return outputClasses;}
+
     public String getName() {return "Filter";}
-
-    public int getTotalInputPorts() {
-        return 1;
-    }
-
-    public int getTotalOutputPorts() {
-        return 1;
-    }
 
 
     @Override

@@ -16,9 +16,12 @@ public class WriteFile extends AbstractMainExecutor {
 
     }
 
-    public int getTotalInputPorts() {return 1;}
-    public int getTotalOutputPorts() {return 0;}
     public String getName() {return "WriteFile";}
+
+    private static Class[] inputClasses={String.class};
+    private static Class[] outputClasses={};
+    public Class[] getInputClasses() {return inputClasses;}
+    public Class[] getOutputClasses() {return outputClasses;}
 
 
 

@@ -4,8 +4,13 @@ import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
 public class ReadFile extends AbstractMainExecutor {
 
-    public int getTotalInputPorts() {return 1;}
-    public int getTotalOutputPorts() {return 1;}
+    public ReadFile() {}
+
+    private static Class[] inputClasses={String.class};
+    private static Class[] outputClasses={String.class};
+    public Class[] getInputClasses() {return inputClasses;}
+    public Class[] getOutputClasses() {return outputClasses;}
+
     public String getName() {return "ReadFile";}
 
 

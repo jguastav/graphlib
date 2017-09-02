@@ -4,10 +4,12 @@ import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
 public class Start extends AbstractMainExecutor {
 
+    private static Class[] inputClasses={};
+    private static Class[] outputClasses={String.class};
+    public Class[] getInputClasses() {return inputClasses;}
+    public Class[] getOutputClasses() {return outputClasses;}
 
-    public int getTotalInputPorts() {return 0;}
-    public int getTotalOutputPorts() {return 1;}
-    public String getName() {return "ReadFile";}
+    public String getName() {return "Start";}
 
 
     @Override

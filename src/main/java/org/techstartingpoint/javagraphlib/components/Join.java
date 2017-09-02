@@ -5,9 +5,13 @@ import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
 public class Join extends AbstractMainExecutor {
 
-    public int getTotalInputPorts() {return 2;}
-    public int getTotalOutputPorts() {return 1;}
     public String getName() {return "Join";}
+
+
+    private static Class[] inputClasses={String.class,String.class};
+    private static Class[] outputClasses={String.class};
+    public Class[] getInputClasses() {return inputClasses;}
+    public Class[] getOutputClasses() {return outputClasses;}
 
 
     @Override

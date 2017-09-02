@@ -1,11 +1,15 @@
 package org.techstartingpoint.javagraphlib.graph;
 
-public class ExecutorPort<T> {
+public class ExecutorPort {
+
+
     String name;
-    T value;
+    Object value;
+    Class allowedClass;
     boolean setted=false;
 
-    public ExecutorPort( String name) {
+    public ExecutorPort(Class clazz, String name) {
+        this.allowedClass=clazz;
         this.name = name;
     }
 
@@ -17,8 +21,12 @@ public class ExecutorPort<T> {
         return value;
     }
 
-    public void setValue(T value) {
-        this.value = value;
+    public void setValue(Object value) {
+        if (value!=null && this.allowedClass.isInstance(value) || value==null) {
+            this.value = this.allowedClass.cast(value);
+        }else {
+            throw new ClassCastException(value.getClass().getName()+" is not instanceof "+allowedClass.getName()+" in port "+this.getName());
+        }
     }
 
 
