@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
-import org.techstartingpoint.javagraphlib.execution.GraphExecutionModel;
+import org.techstartingpoint.javagraphlib.graph.ExecutorModel;
 import org.techstartingpoint.javagraphlib.graph.GraphConnection;
 import org.techstartingpoint.javagraphlib.model.workflow.Connection;
 import org.techstartingpoint.javagraphlib.model.workflow.Node;
@@ -39,7 +39,7 @@ public class GraphAPIService {
      * @param workflowFileName
      * @return
      */
-    public GraphExecutionModel getExecutionModel(String workflowFileName) throws IOException, URISyntaxException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public ExecutorModel getExecutionModel(String workflowFileName) throws IOException, URISyntaxException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         // read workflow
         String jsonWorkflowString=readJson(workflowFileName);
@@ -50,19 +50,19 @@ public class GraphAPIService {
         log.debug(jsonWorkflow.toString());
 
         // generate graph process
-        GraphExecutionModel result = convert(jsonWorkflow);
+        ExecutorModel result = convert(jsonWorkflow);
 
     	return result;
     }
 
-    private GraphExecutionModel convert(Workflow jsonWorkflow) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, URISyntaxException, MalformedURLException, ClassNotFoundException {
+    private ExecutorModel convert(Workflow jsonWorkflow) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, URISyntaxException, MalformedURLException, ClassNotFoundException {
         // Map to store and search nodes
         Map<String,AbstractMainExecutor> nodeMap=new HashMap<String,AbstractMainExecutor>();
-        GraphExecutionModel graphExecutionModel=new GraphExecutionModel();
+        ExecutorModel executorModel =new ExecutorModel();
         for (Node node:jsonWorkflow.getNodes()) {
             String implementationName=BASE_PACKAGE+node.getComponent_info().getName();
             AbstractMainExecutor executorElement=AbstractMainExecutor.create(implementationName,node.getId(),node.getEnvironment_key(),node.getConf());
-            graphExecutionModel.getExecutors().put(executorElement.getNodeId().toString(),executorElement);
+            executorModel.getExecutors().put(executorElement.getNodeId(),executorElement);
             nodeMap.put(node.getId(),executorElement);
         }
         long idConnector=0;
@@ -78,13 +78,13 @@ public class GraphAPIService {
                                     idConnector,
                                     sourceNode,connection.getFrom().getPort_index(),
                                     targetNode,connection.getTo().getPort_index());
-                    graphExecutionModel.getConnectors().add(graphConnection);
+                    executorModel.getConnectors().add(graphConnection);
                 }
             }
             idConnector++;
         }
-        System.out.println(graphExecutionModel.toString());
-        return graphExecutionModel;
+        System.out.println(executorModel.toString());
+        return executorModel;
     }
 
     /**

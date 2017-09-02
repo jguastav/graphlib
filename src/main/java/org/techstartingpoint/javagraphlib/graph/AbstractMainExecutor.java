@@ -17,11 +17,9 @@ import java.util.List;
  */
 public abstract class AbstractMainExecutor  {
 
-
-
 	private String nodeId;
-	private List<ExecutionPort> inputs;
-	private List<ExecutionPort> outputs;
+	private List<ExecutorPort> inputs;
+	private List<ExecutorPort> outputs;
 	private boolean finished=false;
 
     /**
@@ -33,37 +31,26 @@ public abstract class AbstractMainExecutor  {
      * “no data” interfaces refers to a precedence relation.
      * There are no difference between data or no data connectors. The real difference depends on the implementation. Usually “no data” input means that in the implementation of runMain in the component the task can be executed with no importance of the message that has received.
      * In case the implementation doesn’t take data from the received message can be said that the element can be launched by SIGNAL.
-     * In this version …. inputPorts should be always 1
+     * In this version …. totalInputPorts should be always 1
      *
      *
      * @author Jose Alberto Guastavino
      *
      *
      */
-    //TODO: change to array pairs name / index / class
-    private int inputPorts;
 
     /**
      * Number of output data interfaces. This number does not include the async output connector.
      * Components can send data to other excomponents calling
-     * setOutput(index,message) having index between 1 and outputPorts
+     * setOutput(index,message) having index between 1 and totalOutputPorts
      *
-     * @author Jose Alberto Guastavino
-     *
-     */
-    //TODO: change to array pairs name / index / class
-    private int outputPorts;
-
-
-
-    /**
-     *
-     * Complete class name of related component that contains the implementation of the task
-     *
-     * @author Jose Alberto Guastavino
      *
      */
-    private String componentClassName;
+    abstract public int getTotalInputPorts();;
+
+    abstract public int getTotalOutputPorts();
+
+
 
 
     /**
@@ -75,6 +62,7 @@ public abstract class AbstractMainExecutor  {
 	 */
 	private String componentInstanceName;
 	
+
 	
 	/**
 	 * Context on which component is running
@@ -97,19 +85,6 @@ public abstract class AbstractMainExecutor  {
     NodeConfiguration nodeConfiguration;
 
 
-
-
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
     public String getEnvironmentKey() {
         return environmentKey;
     }
@@ -130,33 +105,19 @@ public abstract class AbstractMainExecutor  {
 	
 	/**
 	 * 
-	 * @param name
-	 * @param componentClassName
-	 * @param className
-	 * @param inputPorts
-	 * @param outputPorts
 	 *
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	public AbstractMainExecutor(
-			String name,
-			String componentClassName,
-			String className,
-			int inputPorts,
-			int outputPorts) {
-		this.setComponentClassName(componentClassName);
-		this.setName(name);
-		this.inputs=new ArrayList<ExecutionPort>(inputPorts);
-		for (int i=0;i<inputPorts;i++) {
-			inputs.add(new ExecutionPort(i,Integer.toString(i),null,null,false));
+	public AbstractMainExecutor() {
+		this.inputs=new ArrayList<ExecutorPort>(getTotalInputPorts());
+		for (int i = 0; i< getTotalInputPorts(); i++) {
+			inputs.add(new ExecutorPort<String>(Integer.toString(i)));
 		}
-		this.outputs=new ArrayList<ExecutionPort>(outputPorts);
-		for (int i=0;i<outputPorts;i++) {
-            outputs.add(new ExecutionPort(i,Integer.toString(i),null,null,false));
+		this.outputs=new ArrayList<ExecutorPort>(this.getTotalOutputPorts());
+		for (int i = 0; i< this.getTotalOutputPorts(); i++) {
+            outputs.add(new ExecutorPort<String>(Integer.toString(i)));
 		}
-		this.setInputPorts(inputPorts);
-		this.setOutputPorts(outputPorts);
 		this.finished=false;
 	}
 
@@ -174,15 +135,12 @@ public abstract class AbstractMainExecutor  {
 
 
 
-	public void instantiate(
+	public void setRunningContext(
 			ComponentSystem componentSystem,
-			String instanceName,
 			GraphRunner graphRunner) throws ClassNotFoundException {
-		this.componentSystem = componentSystem;
-		this.componentInstanceName=instanceName;
-		System.out.println("AbstractMainExecutor.instantiate()"+this.componentInstanceName);
+		System.out.println("AbstractMainExecutor.setRunningContext()"+this.componentInstanceName);
 		System.out.println(this.getName()+":"+this.getNodeId());
-		this.componentSystem.register(this.componentInstanceName,this);
+        this.componentSystem = componentSystem;
 		this.runner=graphRunner;
 	}
 
@@ -215,6 +173,9 @@ public abstract class AbstractMainExecutor  {
 
 
     protected void setOutputValue(int index,Object value) throws Exception {
+        System.out.println("index:"+index);
+        System.out.println("runner:"+this.runner);
+
 	    this.getOutputs().get(index).setValue(value);
 	    this.getOutputs().get(index).setSetted(true);
 	    this.runner.broadcast(this.getNodeId(),index,value);
@@ -246,7 +207,7 @@ public abstract class AbstractMainExecutor  {
 
 
     private void emptyOutputs() throws Exception {
-        for (int i=0;i<this.getOutputPorts();i++) {
+        for (int i = 0; i<this.getTotalOutputPorts(); i++) {
             if (!this.getOutputs().get(i).isSetted()) {
                 this.setOutputValue(i,null);
             }
@@ -281,11 +242,11 @@ public abstract class AbstractMainExecutor  {
     // END CORE EXECUTION
 
 
-	public List<ExecutionPort> getInputs() {
+	public List<ExecutorPort> getInputs() {
 		return inputs;
 	}
 
-	public List<ExecutionPort> getOutputs() {
+	public List<ExecutorPort> getOutputs() {
 		return outputs;
 	}
 
@@ -317,7 +278,7 @@ public abstract class AbstractMainExecutor  {
 		if (finished) {
             result=false;
         } else {
-            for (int i=0;i<this.getInputPorts();i++) {
+            for (int i = 0; i<this.getTotalInputPorts(); i++) {
                 if (!this.inputs.get(i).isSetted()) {
                     result=false;
                 }
@@ -329,15 +290,6 @@ public abstract class AbstractMainExecutor  {
 
 
 
-	public String getComponentInstanceName() {
-		return componentInstanceName;
-	}
-
-
-	public void setComponentInstanceName(String componentInstanceName) {
-		this.componentInstanceName = componentInstanceName;
-	}
-
 
 	public ComponentSystem getComponentSystem() {
 		return componentSystem;
@@ -348,36 +300,15 @@ public abstract class AbstractMainExecutor  {
 		this.componentSystem = componentSystem;
 	}
 
-    public int getInputPorts() {
-        return inputPorts;
-    }
 
-    public void setInputPorts(int inputPorts) {
-        this.inputPorts = inputPorts;
-    }
 
-    public int getOutputPorts() {
-        return outputPorts;
-    }
-
-    public void setOutputPorts(int outputPorts) {
-        this.outputPorts = outputPorts;
-    }
-
-    public String getComponentClassName() {
-        return componentClassName;
-    }
-
-    public void setComponentClassName(String componentClassName) {
-        this.componentClassName = componentClassName;
-    }
-
+    public abstract String getName();
 
 	@Override
 	public String toString() {
 		return String.format(
-				"AbstractMainExecutor [nodeId=%s, inputs=%s, outputs=%s, finished=%s, componentInstanceName=%s, componentSystem=%s]",
-                nodeId, inputs, outputs, finished,  componentInstanceName, componentSystem);
+				"AbstractMainExecutor [nodeId=%s, inputs=%s, outputs=%s, finished=%s, componentSystem=%s]",
+                nodeId, inputs, outputs, finished,   componentSystem);
 	}
 
 

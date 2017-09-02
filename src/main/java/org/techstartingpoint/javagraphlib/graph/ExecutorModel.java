@@ -1,5 +1,5 @@
 
-package org.techstartingpoint.javagraphlib.execution;
+package org.techstartingpoint.javagraphlib.graph;
 
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 import org.techstartingpoint.javagraphlib.graph.GraphConnection;
@@ -20,7 +20,7 @@ import java.util.Map;
  *
  */
 
-public class GraphExecutionModel {
+public class ExecutorModel {
 	Map<String,AbstractMainExecutor> executors=new HashMap<String,AbstractMainExecutor>();
 	List<GraphConnection> connectors= new ArrayList<GraphConnection>();
 
@@ -37,7 +37,7 @@ public class GraphExecutionModel {
 
 	@Override
 	public String toString() {
-		return String.format("GraphExecutionModel [\n\texecutors=%s, \n\tconnectors=%s]", executors, connectors);
+		return String.format("ExecutorModel [\n\texecutors=%s, \n\tconnectors=%s]", executors, connectors);
 	}
 
 

@@ -23,15 +23,18 @@ public class App {
         String workflowFileName="workflow.json";
         System.out.println("running "+workflowFileName);
         runnerEnvironment.run(workflowFileName);
+        System.out.println("==============================================================================running ");
 
         workflowFileName="workflow2WithStart.json";
         System.out.println("running "+workflowFileName);
         runnerEnvironment.run(workflowFileName);
+        System.out.println("==============================================================================running ");
 
        //  workflowFileName="workflow2WithStartConnectingWriteAndJoin.json";
         workflowFileName="workflow2WithStartConnectingWriteAndJoin.json";
         System.out.println("running "+workflowFileName);
         runnerEnvironment.run(workflowFileName);
+        System.out.println("==============================================================================running ");
 
 
     }

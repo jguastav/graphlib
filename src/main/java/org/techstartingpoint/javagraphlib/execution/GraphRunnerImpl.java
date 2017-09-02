@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
+import org.techstartingpoint.javagraphlib.graph.ExecutorModel;
 import org.techstartingpoint.javagraphlib.graph.GraphConnection;
 import org.techstartingpoint.javagraphlib.api.GraphAPIService;
 
@@ -43,7 +44,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
      * Data defition of the main flow arranged to be executed including a map of all nodes (included nodes present in subflows) and connectors
      * Connectors are rearranged to deal with the amp of nodes
      */
-	private GraphExecutionModel executionModel;
+	private ExecutorModel executionModel;
 
     /**
 	 * Main framework of execution where all running activities are launched
@@ -97,14 +98,14 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * @author Jose Alberto Guastavino
 	 * 
 	 */
-	private void runExecutors(GraphExecutionModel executionModel) throws Throwable {
+	private void runExecutors(ExecutorModel executionModel) throws Throwable {
 		// main cycle
 		this.componentSystem = ComponentSystem.create();
 		// start all executors
 		// makes all executors begin to listen to messages
 		int idInstanceIndex=1;
 		for (Entry<String, AbstractMainExecutor> executorEntry:executionModel.getExecutors().entrySet()) {
-			executorEntry.getValue().instantiate(componentSystem, String.valueOf(idInstanceIndex++),this);
+			executorEntry.getValue().setRunningContext(componentSystem, this);
 		}
 		// launch all executors that can be started
         boolean executorsThatCanBeStarted=true;
@@ -136,9 +137,10 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * 
 	 */
 	public void run() throws Throwable {
+
+        System.out.println("ExecutionModel:\n\t"+this.executionModel);
+        runExecutors(this.executionModel);
 		try {
-			System.out.println("ExecutionModel:\n\t"+this.executionModel);
-			runExecutors(this.executionModel);
 		} catch (Exception e) {
 			System.out.println(
 					"0:"+
@@ -166,7 +168,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	public void broadcast(String nodeId, int outputIndex, Object value) throws Exception {
 		List<GraphConnection> connectors=this.executionModel.getConnectors();
 		AbstractMainExecutor executor=this.executionModel.getExecutors().get(nodeId);
-		if (outputIndex>=0 && outputIndex<executor.getOutputPorts()) {
+		if (outputIndex>=0 && outputIndex<executor.getTotalOutputPorts()) {
 			for (GraphConnection thisConnector:connectors) {
 				if (thisConnector.getSourceId().equals(executor.getNodeId()) && thisConnector.getSourceIndex()==outputIndex) {
 					AbstractMainExecutor target=this.executionModel.getExecutors().get(thisConnector.getTargetId());
