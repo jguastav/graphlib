@@ -2,13 +2,7 @@ package org.techstartingpoint.javagraphlib;
 
 
 import com.onelake.api.error.OnelakeException;
-import com.onelake.workflowexecutor.cli.CommandLineOptions;
-import com.onelake.workflowexecutor.schema.repo.ComponentRepository;
 import org.techstartingpoint.javagraphlib.execution.GraphRunnerEnvironmentImpl;
-import org.techstartingpoint.javagraphlib.model.repo.YamlParser;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 
 /**
@@ -19,30 +13,17 @@ public class App {
 
     static GraphRunnerEnvironmentImpl runnerEnvironment;
 
-    public static void main(String[] args) throws Throwable {
+    public static void main(String[] args) throws OnelakeException {
 
 
 
         System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
 
-
-
         // String jsonFileName=args[0];
         // String workflowFileName=jsonFileName;
         runnerEnvironment=new GraphRunnerEnvironmentImpl();
 
-        String workflowFileName="workflow.json";
-        System.out.println("running "+workflowFileName);
-        runnerEnvironment.run(workflowFileName);
-        System.out.println("==============================================================================running ");
-
-        workflowFileName="workflow2WithStart.json";
-        System.out.println("running "+workflowFileName);
-        runnerEnvironment.run(workflowFileName);
-        System.out.println("==============================================================================running ");
-
-       //  workflowFileName="workflow2WithStartConnectingWriteAndJoin.json";
-        workflowFileName="workflow2WithStartConnectingWriteAndJoin.json";
+        String workflowFileName=args[0];
         System.out.println("running "+workflowFileName);
         runnerEnvironment.run(workflowFileName);
         System.out.println("==============================================================================running ");

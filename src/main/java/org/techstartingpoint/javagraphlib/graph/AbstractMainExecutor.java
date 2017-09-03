@@ -1,10 +1,11 @@
 package org.techstartingpoint.javagraphlib.graph;
 
+import com.onelake.api.error.OnelakeException;
+import com.onelake.workflowexecutor.error.WorkflowErrorCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.techstartingpoint.javagraphlib.execution.*;
 import org.techstartingpoint.javagraphlib.model.workflow.NodeConfiguration;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  *
  */
 public abstract class AbstractMainExecutor  {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractMainExecutor.class.getName());
 
 	private String nodeId;
 	private List<ExecutorPort> inputs;
@@ -153,21 +155,37 @@ public abstract class AbstractMainExecutor  {
 
 
 
-    public static AbstractMainExecutor create(String className, String id, String environmentKey, NodeConfiguration nodeConfiguration) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static AbstractMainExecutor create(
+            String className,
+            String id,
+            String environmentKey,
+            NodeConfiguration nodeConfiguration) throws OnelakeException {
         Class<?> clazz;
-        clazz = Class.forName(className);
-        AbstractMainExecutor executorElement =(AbstractMainExecutor) clazz.newInstance();
-        executorElement.setNodeId(id);
-        executorElement.setEnvironmentKey(environmentKey);
-        executorElement.setNodeConfiguration(nodeConfiguration);
-        return executorElement;
+
+        try {
+            clazz = Class.forName(className);
+            AbstractMainExecutor executorElement =(AbstractMainExecutor) clazz.newInstance();
+            executorElement.setNodeId(id);
+            executorElement.setEnvironmentKey(environmentKey);
+            executorElement.setNodeConfiguration(nodeConfiguration);
+            return executorElement;
+        } catch (ClassNotFoundException e) {
+            logger.error(WorkflowErrorCode.ClassNotFound.getMessage());
+            throw OnelakeException.build(WorkflowErrorCode.ClassNotFound, e).set("className", className).set("class",AbstractMainExecutor.class);
+        } catch (IllegalAccessException e) {
+            logger.error(WorkflowErrorCode.IllegalAccess.getMessage());
+            throw OnelakeException.build(WorkflowErrorCode.IllegalAccess, e).set("className", className).set("class",AbstractMainExecutor.class);
+        } catch (InstantiationException e) {
+            logger.error(WorkflowErrorCode.ClassNotInstantiable.getMessage());
+            throw OnelakeException.build(WorkflowErrorCode.ClassNotInstantiable, e).set("className", className).set("class",AbstractMainExecutor.class);
+        }
     }
 
 
 
 	public void setRunningContext(
 			ComponentSystem componentSystem,
-			GraphRunner graphRunner) throws ClassNotFoundException {
+			GraphRunner graphRunner)  {
 		System.out.println("AbstractMainExecutor.setRunningContext()"+this.componentInstanceName);
 		System.out.println(this.getName()+":"+this.getNodeId());
         this.componentSystem = componentSystem;
@@ -186,23 +204,23 @@ public abstract class AbstractMainExecutor  {
 
 
 
-    public Object getOutputValue(int index) throws Exception {
+    public Object getOutputValue(int index)  {
         return this.getOutputs().get(index).getValue();
     }
 
 
-    public Object getInputValue(int index) throws Exception {
+    public Object getInputValue(int index)  {
         return this.getInputs().get(index).getValue();
     }
 
 
-    public void setInputValue(int index,Object value) throws Exception {
+    public void setInputValue(int index,Object value)  {
         this.getInputs().get(index).setValue(value);
         this.getInputs().get(index).setSetted(true);
     }
 
 
-    protected void setOutputValue(int index,Object value) throws Exception {
+    protected void setOutputValue(int index,Object value)  {
         System.out.println("index:"+index);
         System.out.println("runner:"+this.runner);
 
@@ -225,7 +243,7 @@ public abstract class AbstractMainExecutor  {
      * @author Jose Alberto Guastavino
      *
      */
-    public void run() throws Throwable {
+    public void run()  {
         runPre();
         runMain();
         runPost();
@@ -236,7 +254,7 @@ public abstract class AbstractMainExecutor  {
     }
 
 
-    private void emptyOutputs() throws Exception {
+    private void emptyOutputs()  {
         for (int i = 0; i<this.getTotalOutputPorts(); i++) {
             if (!this.getOutputs().get(i).isSetted()) {
                 this.setOutputValue(i,null);
@@ -261,12 +279,12 @@ public abstract class AbstractMainExecutor  {
      *  getEnvironment()... : to use shared resources of the execution runnning environment
      *  getProperties() : to access customized data of the element setted in each instance
      *
-     * @throws Exception
+     * @
      *
      * @author Jose Alberto Guastavino
      *
      */
-    protected abstract void runMain() throws Exception;
+    protected abstract void runMain() ;
 
 
     // END CORE EXECUTION

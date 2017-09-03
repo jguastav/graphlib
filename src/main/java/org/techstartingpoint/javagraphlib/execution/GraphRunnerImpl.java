@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.onelake.api.error.OnelakeException;
 import com.onelake.workflowexecutor.schema.repo.ComponentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +33,6 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-
-
-
-
-	
 
 	/**
 	 * Current running workflow
@@ -78,7 +73,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	public GraphRunnerImpl(GraphAPIService workflowService,
 						   String workflowFileName,
 						   ComponentRepository componentRepository,
-						   GraphRunnerEnvironmentImpl graphRunnerEnvironment) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+						   GraphRunnerEnvironmentImpl graphRunnerEnvironment) throws OnelakeException {
 		this.executionModel =workflowService.getExecutionModel(workflowFileName,componentRepository);
 		// retrieve workflow
 
@@ -96,12 +91,12 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * Launches the first elements to be executed
 	 * Elements and connectors that can be executed are those that doess not need input data (LAUNCHED_BY_SIGNAL) and doesnt have predecessors
 	 * @param executionModel
-	 * @throws Exception
+	 * @
 	 * 
 	 * @author Jose Alberto Guastavino
 	 * 
 	 */
-	private void runExecutors(ExecutorModel executionModel) throws Throwable {
+	private void runExecutors(ExecutorModel executionModel)  {
 		// main cycle
 		this.componentSystem = ComponentSystem.create();
 		// start all executors
@@ -139,7 +134,8 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * @author Jose Alberto Guastavino
 	 * 
 	 */
-	public void run() throws Throwable {
+	public void run() throws OnelakeException {
+        this.executionModel.validate();
 
         System.out.println("ExecutionModel:\n\t"+this.executionModel);
         runExecutors(this.executionModel);
@@ -168,7 +164,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 * @author Jose Alberto Guastavino
 	 * 
 	 */
-	public void broadcast(String nodeId, int outputIndex, Object value) throws Exception {
+	public void broadcast(String nodeId, int outputIndex, Object value)  {
 		List<GraphConnection> connectors=this.executionModel.getConnectors();
 		AbstractMainExecutor executor=this.executionModel.getExecutors().get(nodeId);
 		if (outputIndex>=0 && outputIndex<executor.getTotalOutputPorts()) {

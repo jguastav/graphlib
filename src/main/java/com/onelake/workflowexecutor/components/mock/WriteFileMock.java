@@ -1,12 +1,13 @@
 package com.onelake.workflowexecutor.components.mock;
 
 
+import com.onelake.api.error.OnelakeException;
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
 public class WriteFileMock extends AbstractMainExecutor {
 
     @Override
-    protected void runMain() throws Exception {
+    protected void runMain()  {
         System.out.println("WriteFileMock");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());

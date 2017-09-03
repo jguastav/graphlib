@@ -1,5 +1,6 @@
 package com.onelake.workflowexecutor.components.mock;
 
+import com.onelake.api.error.OnelakeException;
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
 public class FilterMock extends AbstractMainExecutor {
@@ -13,7 +14,7 @@ public class FilterMock extends AbstractMainExecutor {
 
 
     @Override
-    protected void runMain() throws Exception {
+    protected void runMain()  {
         System.out.println("FilterMock");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());

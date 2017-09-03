@@ -13,7 +13,13 @@ public enum WorkflowErrorCode implements ErrorCode {
     JsonParserError(103, "Json parse error"),
     InsufficientCommandOptions(104, "Failed to parse command line options"),
     FileNotFound(105, "File not found"),
-    UnableToReadFile(106, "Unable to read file");
+    UnableToReadFile(106, "Unable to read file"),
+    IOException(107,"Error accessing filesystem"),
+    URISyntaxError(108,"URI Syntax Error"),
+    IllegalAccess(109,"Cannot access the class"),
+    ZeroNodesGraph(110,"Graph contains 0 nodes"),
+    NoImplementationName(111,"Node does not have implementation name"),
+    WrongIdNodeOnConnector(112,"Wrong node Id on connector");
 
     private final int code;
     private final String message;

@@ -1,6 +1,7 @@
 
 package org.techstartingpoint.javagraphlib.graph;
 
+import com.onelake.api.error.OnelakeException;
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 import org.techstartingpoint.javagraphlib.graph.GraphConnection;
 
@@ -53,5 +54,29 @@ public class ExecutorModel {
 			}
 		}
 		return executorList;
+    }
+
+    /**
+     * Make checkings to ensure the Graph is correct
+     *
+     *  No cycle
+     *  All inputs and output ports are connected
+     *  There are not connections to orphan ports
+     *  There are not start nodes
+     *  there are no finish nodes
+     *  check there are no inputs that receives more than one connector
+     *
+     *  http://algs4.cs.princeton.edu/42digraph/DirectedCycle.java.html
+     * http://www.sanfoundry.com/java-programming-examples-graph-problems-algorithms/
+     * check connectors when running
+     *
+     * @throws OnelakeException
+     */
+    public void validate() throws OnelakeException {
+    }
+
+
+    public boolean checkCycle() {
+        return false;
     }
 }

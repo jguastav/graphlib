@@ -1,6 +1,8 @@
 package org.techstartingpoint.javagraphlib.execution;
 
 
+import com.onelake.api.error.OnelakeException;
+
 /**
  * method of the runner implemtation that excomponents can use
  * @author Jose Alberto Guastavino
@@ -16,11 +18,11 @@ public interface GraphRunner {
 	 * @param fluxId
 	 * @param outputIndex
 	 * @param value
-	 * @throws Exception
+	 * @
 	 * 
 	 * @author Jose Alberto Guastavino
 	 */
-	void broadcast(String fluxId, int outputIndex, Object value) throws Exception;
+	void broadcast(String fluxId, int outputIndex, Object value) ;
 
 
 

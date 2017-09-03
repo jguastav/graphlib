@@ -11,19 +11,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.File;
 
-
 public class YamlParser<T> {
     private static final Logger logger = LoggerFactory.getLogger(YamlParser.class.getName());
-    public T readYaml(String fileName, Class<T> c) throws OnelakeException
-    {
-
+    public T readYaml(String fileName, Class<T> c) throws OnelakeException {
         try {
-
-
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
             T t = mapper.readValue(new File(fileName), c);
-
-//            T t = mapper.readValue(new com.sun.java.util.jar.pack.Package.File(fileName), c);
             logger.info(ReflectionToStringBuilder.toString(t,ToStringStyle.MULTI_LINE_STYLE));
             return t;
         } catch (Exception e) {
