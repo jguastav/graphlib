@@ -7,7 +7,7 @@
   "nodes": [{
     "id": "dummystart",
     "component_info": {
-      "id": "dummystart",
+      "id": "aaaaaaaa",
       "name": "Start",
       "version": "1.0"
     },

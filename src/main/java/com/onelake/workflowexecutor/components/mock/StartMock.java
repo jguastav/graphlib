@@ -1,19 +1,20 @@
-package org.techstartingpoint.javagraphlib.components;
+package com.onelake.workflowexecutor.components.mock;
 
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
-public class SQLExecutor extends AbstractMainExecutor {
+public class StartMock extends AbstractMainExecutor {
 
-    public String getName() {return "SQLExecutor";}
-
-    private static Class[] inputClasses={String.class};
+    private static Class[] inputClasses={};
     private static Class[] outputClasses={String.class};
     public Class[] getInputClasses() {return inputClasses;}
     public Class[] getOutputClasses() {return outputClasses;}
 
+    public String getName() {return "StartMock";}
+
+
     @Override
     protected void runMain() throws Exception {
-        System.out.println("SQLExecutor");
+        System.out.println("StartMock");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());
         System.out.println("input:"+this.getTotalInputPorts());

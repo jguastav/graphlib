@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.onelake.workflowexecutor.schema.repo.ComponentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
@@ -32,14 +33,14 @@ import org.techstartingpoint.javagraphlib.model.workflow.Workflow;
 public class GraphAPIService {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private static final String BASE_PACKAGE="org.techstartingpoint.javagraphlib.components.";
 
     /**
      * Get Activity by a given name in a given job
      * @param workflowFileName
+     * @param componentRepository
      * @return
      */
-    public ExecutorModel getExecutionModel(String workflowFileName) throws IOException, URISyntaxException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public ExecutorModel getExecutionModel(String workflowFileName, ComponentRepository componentRepository) throws IOException, URISyntaxException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         // read workflow
         String jsonWorkflowString=readJson(workflowFileName);
@@ -50,20 +51,31 @@ public class GraphAPIService {
         log.debug(jsonWorkflow.toString());
 
         // generate graph process
-        ExecutorModel result = convert(jsonWorkflow);
+        ExecutorModel result = convert(jsonWorkflow,componentRepository);
 
     	return result;
     }
 
-    private ExecutorModel convert(Workflow jsonWorkflow) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, URISyntaxException, MalformedURLException, ClassNotFoundException {
+
+    private String getComponentName(String id,String name,String version) {
+        return id+"-"+name+"-"+version;
+    }
+
+    private ExecutorModel convert(Workflow jsonWorkflow,ComponentRepository componentRepository) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, URISyntaxException, MalformedURLException, ClassNotFoundException {
         // Map to store and search nodes
         Map<String,AbstractMainExecutor> nodeMap=new HashMap<String,AbstractMainExecutor>();
         ExecutorModel executorModel =new ExecutorModel();
         for (Node node:jsonWorkflow.getNodes()) {
-            String implementationName=BASE_PACKAGE+node.getComponent_info().getName();
-            AbstractMainExecutor executorElement=AbstractMainExecutor.create(implementationName,node.getId(),node.getEnvironment_key(),node.getConf());
-            executorModel.getExecutors().put(executorElement.getNodeId(),executorElement);
-            nodeMap.put(node.getId(),executorElement);
+            String implementationName=componentRepository.getComponents().get(
+                    getComponentName(node.getComponent_info().getId(),
+                            node.getComponent_info().getName(),
+                            node.getComponent_info().getVersion()));
+            if (implementationName!=null) {
+                AbstractMainExecutor executorElement=AbstractMainExecutor.create(implementationName,node.getId(),node.getEnvironment_key(),node.getConf());
+                executorModel.getExecutors().put(executorElement.getNodeId(),executorElement);
+                nodeMap.put(node.getId(),executorElement);
+            }
+
         }
         long idConnector=0;
         for (Connection connection:jsonWorkflow.getConnections()) {

@@ -1,13 +1,13 @@
-package org.techstartingpoint.javagraphlib.components;
+package com.onelake.workflowexecutor.components.mock;
 
 
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
 
-public class WriteFile extends AbstractMainExecutor {
+public class WriteFileMock extends AbstractMainExecutor {
 
     @Override
     protected void runMain() throws Exception {
-        System.out.println("WriteFile");
+        System.out.println("WriteFileMock");
         System.out.println(this.getEnvironmentKey());
         System.out.println(this.getNodeConfiguration());
         System.out.println("input:"+this.getTotalInputPorts());
@@ -16,7 +16,7 @@ public class WriteFile extends AbstractMainExecutor {
 
     }
 
-    public String getName() {return "WriteFile";}
+    public String getName() {return "WriteFileMock";}
 
     private static Class[] inputClasses={String.class};
     private static Class[] outputClasses={};

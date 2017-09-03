@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map.Entry;
+
+import com.onelake.workflowexecutor.schema.repo.ComponentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.techstartingpoint.javagraphlib.graph.AbstractMainExecutor;
@@ -75,8 +77,9 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 	 */
 	public GraphRunnerImpl(GraphAPIService workflowService,
 						   String workflowFileName,
+						   ComponentRepository componentRepository,
 						   GraphRunnerEnvironmentImpl graphRunnerEnvironment) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		this.executionModel =workflowService.getExecutionModel(workflowFileName);
+		this.executionModel =workflowService.getExecutionModel(workflowFileName,componentRepository);
 		// retrieve workflow
 
 
@@ -89,7 +92,7 @@ public class GraphRunnerImpl implements GraphRunner,GraphRunnerLauncher {
 
 	
 	/**
-	 * Start all excomponents that have no predecessors
+	 * StartMock all excomponents that have no predecessors
 	 * Launches the first elements to be executed
 	 * Elements and connectors that can be executed are those that doess not need input data (LAUNCHED_BY_SIGNAL) and doesnt have predecessors
 	 * @param executionModel
