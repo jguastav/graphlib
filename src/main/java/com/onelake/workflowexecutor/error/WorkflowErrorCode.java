@@ -7,7 +7,7 @@ import com.onelake.api.error.ErrorCode;
  */
 public enum WorkflowErrorCode implements ErrorCode {
 
-    NoSuchVertex(101,"No Such Vertex found"),
+    NoSuchVertex(101,"No Such Edge found"),
     ClassNotInstantiable(102, "Class cannot be instantiated" ),
     ClassNotFound(102, "Class not found"),
     JsonParserError(103, "Json parse error"),
@@ -19,7 +19,9 @@ public enum WorkflowErrorCode implements ErrorCode {
     IllegalAccess(109,"Cannot access the class"),
     ZeroNodesGraph(110,"Graph contains 0 nodes"),
     NoImplementationName(111,"Node does not have implementation name"),
-    WrongIdNodeOnConnector(112,"Wrong node Id on connector");
+    WrongIdNodeOnConnector(112,"Wrong node Id on connector"),
+    GraphHasCycle(113,"Graph contains at least one cycle"),
+    UnconnectedNodes(114,"There are unconnected nodes in the workflow");
 
     private final int code;
     private final String message;

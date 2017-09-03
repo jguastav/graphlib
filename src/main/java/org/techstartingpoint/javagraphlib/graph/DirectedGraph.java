@@ -90,7 +90,7 @@ public class DirectedGraph {
      * @throws IllegalArgumentException if the number of vertices or edges is negative
      * @throws IllegalArgumentException if the input stream is in the wrong format
      */
-    public DirectedGraph(int numberOfElements, int numberOfEdges, List<Vertex> vertexList) {
+    public DirectedGraph(int numberOfElements, int numberOfEdges, List<Edge> edgeList) {
         try {
             this.V = numberOfElements;
             if (V < 0) throw new IllegalArgumentException("number of vertices in a Digraph must be nonnegative");
@@ -102,8 +102,8 @@ public class DirectedGraph {
             int E = numberOfEdges;
             if (E < 0) throw new IllegalArgumentException("number of edges in a Digraph must be nonnegative");
             for (int i = 0; i < E; i++) {
-                int v = vertexList.get(i).getFrom();
-                int w = vertexList.get(i).getTo();
+                int v = edgeList.get(i).getFrom();
+                int w = edgeList.get(i).getTo();
                 addEdge(v, w);
             }
         }
