@@ -21,7 +21,12 @@ public enum WorkflowErrorCode implements ErrorCode {
     NoImplementationName(111,"Node does not have implementation name"),
     WrongIdNodeOnConnector(112,"Wrong node Id on connector"),
     GraphHasCycle(113,"Graph contains at least one cycle"),
-    UnconnectedNodes(114,"There are unconnected nodes in the workflow");
+    UnconnectedNodes(114,"There are unconnected nodes in the workflow"),
+    NoStartNode(115,"Workflow does not have start node (with 0 inputs)"),
+    NoFinishNode(116,"Workflow does not have finish node (with 0 outputs)"),
+    UnusedPorts(117,"There are at least one not used port"),
+    InputPortsManyConnectors(118,"There are input ports receiving more than one connector"),
+    OrphanPort(119,"There are connectors pointing to orphan ports");
 
     private final int code;
     private final String message;
