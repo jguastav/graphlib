@@ -90,7 +90,7 @@ public class GraphAPIService {
                 AbstractMainExecutor executorElement=
                         AbstractMainExecutor.create(
                                 implementationName,node.getId(),node.getEnvironment_key(),node.getConf());
-                executorModel.getExecutors().put(executorElement.getNodeId(),executorElement);
+                executorModel.addExecutor(executorElement);
                 nodeMap.put(node.getId(),executorElement);
             } else {
                 logger.error(WorkflowErrorCode.NoImplementationName.getMessage());
@@ -115,7 +115,7 @@ public class GraphAPIService {
                                     idConnector,
                                     sourceNode,connection.getFrom().getPort_index(),
                                     targetNode,connection.getTo().getPort_index());
-                    executorModel.getConnectors().add(graphConnection);
+                    executorModel.addConnector(graphConnection);
                 }
             } else {
                 logger.error(WorkflowErrorCode.WrongIdNodeOnConnector.getMessage());

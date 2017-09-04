@@ -1,9 +1,12 @@
 package org.techstartingpoint.javagraphlib.integration;
 
 import com.onelake.api.error.OnelakeException;
+import com.onelake.workflowexecutor.error.WorkflowErrorCode;
 import org.junit.Before;
 import org.junit.Test;
 import org.techstartingpoint.javagraphlib.App;
+
+import static org.junit.Assert.assertEquals;
 
 public class IntegrationTest {
 
@@ -16,20 +19,28 @@ public class IntegrationTest {
 
 
     @Test
-    public void testIntegration1() throws OnelakeException {
+    public void testIntegration1()  {
         String args[] = {
                 "workflow.json"
         };
-        App.main(args);
+        try {
+            App.main(args);
+        } catch (OnelakeException e) {
+            assertEquals(e.getErrorCode(),WorkflowErrorCode.NoStartNode);
+        }
     }
 
 
     @Test
-    public void testIntegrationWitStart() throws OnelakeException {
+    public void testIntegrationWitStart()  {
         String args[] = {
                 "workflow2WithStart.json"
         };
-        App.main(args);
+        try {
+            App.main(args);
+        } catch (OnelakeException e) {
+            assertEquals(e.getErrorCode(),WorkflowErrorCode.UnusedPorts);
+        }
     }
 
     @Test

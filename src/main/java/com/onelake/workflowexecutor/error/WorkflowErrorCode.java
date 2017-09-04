@@ -26,7 +26,8 @@ public enum WorkflowErrorCode implements ErrorCode {
     NoFinishNode(116,"Workflow does not have finish node (with 0 outputs)"),
     UnusedPorts(117,"There are at least one not used port"),
     InputPortsManyConnectors(118,"There are input ports receiving more than one connector"),
-    OrphanPort(119,"There are connectors pointing to orphan ports");
+    OrphanPort(119,"There are connectors pointing to orphan ports"),
+    NodeAlreadyExists(120,"Executor Node already exists");
 
     private final int code;
     private final String message;

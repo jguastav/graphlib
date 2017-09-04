@@ -30,18 +30,13 @@ public class ExecutorModel {
 
 	
 	/**
-	 * Components of the activity
+	 * Components of the workflow
 	 */
 	public Map<String, AbstractMainExecutor> getExecutors() {
 		return executors;
 	}
 	public List<GraphConnection> getConnectors() {
 		return connectors;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("ExecutorModel [\n\texecutors=%s, \n\tconnectors=%s]", executors, connectors);
 	}
 
 
@@ -245,6 +240,14 @@ public class ExecutorModel {
     }
 
 
+    /**
+     * Check if all nodes in a directed graph are connected
+     * @param totalElements
+     * @param edgeList
+     * @return
+     *
+     * @author Jose Alberto Guastavino
+     */
     private boolean checkWeaklyConnected(int totalElements,List<Edge> edgeList) {
         boolean result=true;
         if (totalElements>1) {
@@ -295,12 +298,28 @@ public class ExecutorModel {
         return result;
     }
 
+
+    /**
+     * Check if a directed graph contains a cycle
+     * @param directedGraph
+     * @return
+     */
     private boolean checkCycle(DirectedGraph directedGraph) {
         DirectedCycle finder=new DirectedCycle(directedGraph);
         return finder.hasCycle();
     }
 
 
+    /**
+     *
+     * Convert the ExecutorModel to a directed graph in order to make general checkings
+     *
+     * @param nodeElements
+     * @param edgeSet
+     * @retunn
+     *
+     * @author
+     */
     private DirectedGraph convert(int nodeElements,Set<Edge> edgeSet) {
 
         DirectedGraph directedGraph=new DirectedGraph(nodeElements, edgeSet.size(),new ArrayList<Edge>(edgeSet));
@@ -308,4 +327,48 @@ public class ExecutorModel {
         return directedGraph;
 
     }
+
+
+
+
+    public void addExecutor(AbstractMainExecutor executorElement) throws OnelakeException{
+        if (this.getExecutors().containsKey(executorElement.getNodeId())) {
+            logger.error(WorkflowErrorCode.NodeAlreadyExists.getMessage());
+            throw OnelakeException.build(WorkflowErrorCode.NodeAlreadyExists).set("nodeId",executorElement.getNodeId());
+        } else {
+            this.getExecutors().put(executorElement.getNodeId(),executorElement);
+        }
+    }
+
+
+    /**
+     * Add connector
+     * @param graphConnection
+     * @throws OnelakeException
+     *
+     * @author Jose Alberto Guastavino
+     */
+    public void addConnector(GraphConnection graphConnection) throws OnelakeException {
+        AbstractMainExecutor sourceElement=this.getExecutors().get(graphConnection.getSourceId());
+        if (sourceElement==null) {
+            logger.error(WorkflowErrorCode.OrphanPort.getMessage());
+            throw OnelakeException.build(WorkflowErrorCode.OrphanPort).set("nodeId",graphConnection.getSourceId());
+        } else {
+            if (graphConnection.getSourceIndex()>=0 && graphConnection.getSourceIndex()<sourceElement.getTotalOutputPorts()) {
+                this.getConnectors().add(graphConnection);
+            } else {
+                logger.error(WorkflowErrorCode.OrphanPort.getMessage());
+                throw OnelakeException.build(WorkflowErrorCode.OrphanPort).
+                        set("nodeId",graphConnection.getSourceId()).set("index",graphConnection.getSourceIndex());
+            }
+        }
+    }
+
+
+    @Override
+    public String toString() {
+        return String.format("ExecutorModel [\n\texecutors=%s, \n\tconnectors=%s]", executors, connectors);
+    }
+
+
 }
