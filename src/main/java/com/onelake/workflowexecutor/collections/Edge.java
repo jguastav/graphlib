@@ -1,4 +1,4 @@
-package com.onelake.workflowexecutor.graph;
+package com.onelake.workflowexecutor.collections;
 
 public class Edge {
     int from;

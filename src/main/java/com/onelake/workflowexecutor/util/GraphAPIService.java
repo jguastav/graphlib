@@ -1,5 +1,5 @@
 
-package com.onelake.workflowexecutor.api;
+package com.onelake.workflowexecutor.util;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,13 +11,13 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.onelake.api.error.OnelakeException;
+import com.onelake.workflowexecutor.api.AbstractMainExecutor;
 import com.onelake.workflowexecutor.error.WorkflowErrorCode;
 import com.onelake.workflowexecutor.schema.repo.ComponentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.onelake.workflowexecutor.graph.AbstractMainExecutor;
-import com.onelake.workflowexecutor.graph.ExecutorModel;
-import com.onelake.workflowexecutor.graph.GraphConnection;
+import com.onelake.workflowexecutor.collections.ExecutorModel;
+import com.onelake.workflowexecutor.collections.GraphConnection;
 import com.onelake.workflowexecutor.schema.workflow.Connection;
 import com.onelake.workflowexecutor.schema.workflow.Node;
 import com.onelake.workflowexecutor.schema.workflow.Workflow;
@@ -81,20 +81,20 @@ public class GraphAPIService {
         // generate nodes
         for (Node node:jsonWorkflow.getNodes()) {
             String implementationName=componentRepository.getComponents().get(
-                    getComponentName(node.getComponent_info().getId(),
-                            node.getComponent_info().getName(),
-                            node.getComponent_info().getVersion()));
+                    getComponentName(node.getComponentInfo().getId(),
+                            node.getComponentInfo().getName(),
+                            node.getComponentInfo().getVersion()));
             if (implementationName!=null) {
                 AbstractMainExecutor executorElement=
                         AbstractMainExecutor.create(
-                                implementationName,node.getId(),node.getEnvironment_key(),node.getConf());
+                                implementationName,node.getId(),node.getEnvironmentKey(),node.getConf());
                 executorModel.addExecutor(executorElement);
                 nodeMap.put(node.getId(),executorElement);
             } else {
                 logger.error(WorkflowErrorCode.NoImplementationName.getMessage());
                 throw OnelakeException.build(WorkflowErrorCode.NoImplementationName).
                         set("graphName", workflowName).
-                        set("nodeId",node.getComponent_info().getId()).
+                        set("nodeId",node.getComponentInfo().getId()).
                         set("class", GraphAPIService.class);
             }
 

@@ -1,10 +1,23 @@
 package com.onelake.workflowexecutor.schema.workflow;
 
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Node {
-    String id;
-    ComponentInfo component_info;
-    String environment_key;
-    NodeConfiguration conf;
+
+    @SerializedName("id")
+    @Expose
+    private String id;
+    @SerializedName("component_info")
+    @Expose
+    private ComponentInfo componentInfo;
+    @SerializedName("environment_key")
+    @Expose
+    private String environmentKey;
+    @SerializedName("conf")
+    @Expose
+    private JsonElement conf;
 
     public String getId() {
         return id;
@@ -14,38 +27,21 @@ public class Node {
         this.id = id;
     }
 
-    public ComponentInfo getComponent_info() {
-        return component_info;
+    public ComponentInfo getComponentInfo() { return componentInfo; }
+
+    public void setComponentInfo(ComponentInfo component) { this.componentInfo = componentInfo; }
+
+    public String getEnvironmentKey() { return environmentKey; }
+
+    public void setEnvironmentKey(String environmentKey) { this.environmentKey = environmentKey; }
+
+    public String getConf() {
+        return conf.toString();
     }
 
-    public void setComponent_info(ComponentInfo component_info) {
-        this.component_info = component_info;
-    }
-
-    public String getEnvironment_key() {
-        return environment_key;
-    }
-
-    public void setEnvironment_key(String environment_key) {
-        this.environment_key = environment_key;
-    }
-
-    public NodeConfiguration getConf() {
-        return conf;
-    }
-
-    public void setConf(NodeConfiguration conf) {
+    public void setConf(JsonElement conf) {
         this.conf = conf;
     }
 
-    @Override
-    public String toString() {
-        return "\tNode{" +
-                "id='" + id + '\'' +
-                ", component_info=" + component_info +
-                ", environment_key='" + environment_key + '\'' +
-                ", conf=" + conf +
-                "\n"+
-                '}';
-    }
+
 }

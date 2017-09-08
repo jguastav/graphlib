@@ -1,12 +1,12 @@
-package com.onelake.workflowexecutor.graph;
+package com.onelake.workflowexecutor.api;
 
 import com.onelake.api.error.OnelakeException;
+import com.onelake.workflowexecutor.collections.ExecutorPort;
 import com.onelake.workflowexecutor.error.WorkflowErrorCode;
 import com.onelake.workflowexecutor.executions.ComponentSystem;
 import com.onelake.workflowexecutor.executions.GraphRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.onelake.workflowexecutor.schema.workflow.NodeConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +88,7 @@ public abstract class AbstractMainExecutor  {
 
 
     String environmentKey;
-    NodeConfiguration nodeConfiguration;
+    String nodeConfiguration;
 
 
     public String getEnvironmentKey() {
@@ -99,11 +99,11 @@ public abstract class AbstractMainExecutor  {
         this.environmentKey = environmentKey;
     }
 
-    public NodeConfiguration getNodeConfiguration() {
+    public String getNodeConfiguration() {
         return nodeConfiguration;
     }
 
-    public void setNodeConfiguration(NodeConfiguration nodeConfiguration) {
+    public void setNodeConfiguration(String nodeConfiguration) {
         this.nodeConfiguration = nodeConfiguration;
     }
 
@@ -160,7 +160,7 @@ public abstract class AbstractMainExecutor  {
             String className,
             String id,
             String environmentKey,
-            NodeConfiguration nodeConfiguration) throws OnelakeException {
+            String nodeConfiguration) throws OnelakeException {
         Class<?> clazz;
 
         try {

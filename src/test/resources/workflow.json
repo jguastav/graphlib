@@ -87,23 +87,13 @@
       "port_index": 0
     },
     "to": {
-      "node_id": "a0b1",
+      "node_id": "c20f5b58",
       "port_index": 0
     }
   },
     {
       "from": {
         "node_id": "a0b1",
-        "port_index": 0
-      },
-      "to": {
-        "node_id": "c20f5b58",
-        "port_index": 0
-      }
-    },
-    {
-      "from": {
-        "node_id": "c20f5b58",
         "port_index": 0
       },
       "to": {
@@ -119,6 +109,16 @@
       "to": {
         "node_id": "11e5",
         "port_index": 0
+      }
+    },
+    {
+      "from": {
+        "node_id": "c20f5b58",
+        "port_index": 0
+      },
+      "to": {
+        "node_id": "11e5",
+        "port_index": 1
       }
     },
     {

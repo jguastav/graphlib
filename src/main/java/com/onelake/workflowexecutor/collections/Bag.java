@@ -1,4 +1,4 @@
-package com.onelake.workflowexecutor.graph;
+package com.onelake.workflowexecutor.collections;
 /******************************************************************************
  *  Compilation:  javac Bag.java
  *  Execution:    java Bag < input.txt

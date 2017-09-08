@@ -1,7 +1,7 @@
 package com.onelake.workflowexecutor.graph;
 
-import com.onelake.workflowexecutor.graph.DirectedCycle;
-import com.onelake.workflowexecutor.graph.DirectedGraph;
+import com.onelake.workflowexecutor.collections.DirectedCycle;
+import com.onelake.workflowexecutor.collections.DirectedGraph;
 
 public class DirectedCycleTest {
     DirectedGraph G = new DirectedGraph(0,0,null);

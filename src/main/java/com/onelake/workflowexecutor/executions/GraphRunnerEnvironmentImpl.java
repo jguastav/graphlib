@@ -6,7 +6,7 @@ import com.onelake.workflowexecutor.error.WorkflowErrorCode;
 import com.onelake.workflowexecutor.schema.repo.ComponentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.onelake.workflowexecutor.api.GraphAPIService;
+import com.onelake.workflowexecutor.util.GraphAPIService;
 import com.onelake.workflowexecutor.schema.repo.YamlParser;
 
 import java.net.URISyntaxException;

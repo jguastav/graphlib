@@ -1,7 +1,7 @@
 package com.onelake.workflowexecutor.components.mock;
 
 
-import com.onelake.workflowexecutor.graph.AbstractMainExecutor;
+import com.onelake.workflowexecutor.api.AbstractMainExecutor;
 
 public class WriteFileMock extends AbstractMainExecutor {
 

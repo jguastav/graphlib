@@ -2,6 +2,7 @@ package com.onelake.workflowexecutor.integration;
 
 import com.onelake.api.error.OnelakeException;
 import com.onelake.workflowexecutor.error.WorkflowErrorCode;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import com.onelake.workflowexecutor.App;
@@ -19,15 +20,11 @@ public class IntegrationTest {
 
 
     @Test
-    public void testIntegration1()  {
+    public void testIntegration1() throws OnelakeException {
         String args[] = {
                 "workflow.json"
         };
-        try {
             App.main(args);
-        } catch (OnelakeException e) {
-            assertEquals(e.getErrorCode(),WorkflowErrorCode.NoStartNode);
-        }
     }
 
 

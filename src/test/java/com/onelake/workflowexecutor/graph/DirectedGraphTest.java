@@ -1,6 +1,6 @@
 package com.onelake.workflowexecutor.graph;
 
-import com.onelake.workflowexecutor.graph.DirectedGraph;
+import com.onelake.workflowexecutor.collections.DirectedGraph;
 
 public class DirectedGraphTest {
     /**
